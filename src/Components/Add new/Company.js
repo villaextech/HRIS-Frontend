@@ -102,20 +102,6 @@ const Company = () => {
         </div>
       </div>
       <div className="form-row">
-        <div className="form-group"style={{ width: '40%' }}>
-          <label htmlFor="logo"><i className="fas fa-file-upload"></i></label>
-          <input
-            id="logo"
-            name="logo"
-            accept=".png, .jpg, .jpeg"
-            onChange={handleLogoChange}
-            required
-            style={{ width: '100%' }}
-            
-          />
-        </div>
-      </div>
-      <div className="form-row">
         <div className="form-group">
           <label htmlFor="area"><i className="fas fa-map-marked-alt"></i></label>
           <input
@@ -220,6 +206,21 @@ const Company = () => {
             value={formData.contactPersonPhone}
             onChange={handleChange}
             required
+          />
+        </div>
+      </div>
+      <div className="form-row">
+        <div className="form-group">
+          <label htmlFor="logo"><i className="fas fa-cloud-upload-alt"></i>
+          Logo</label>
+          <input
+          type='file'
+            id="logo"
+            name="logo"
+            accept=".png, .jpg, .jpeg"
+            onChange={handleLogoChange}
+            required
+            
           />
         </div>
       </div>
