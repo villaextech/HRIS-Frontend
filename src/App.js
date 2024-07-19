@@ -1,9 +1,9 @@
 import React from 'react'
- import Sidebar from './Components/Sidebar/Sidebar'
+import Company from './Components/Add new/Company'
 const App = () => {
   return (
     <div>
-      <Sidebar/>
+      <Company/>
     </div>
   )
 }
