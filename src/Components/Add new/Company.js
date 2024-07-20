@@ -69,7 +69,7 @@ const Company = () => {
     e.preventDefault();
     if (editIndex !== null) {
       // Editing an existing company
-      const updatedCompanies = companies.map((company, index) => 
+      const updatedCompanies = companies.map((company, index) =>
         index === editIndex ? { ...formData, logoFile } : company
       );
       setCompanies(updatedCompanies);
@@ -289,10 +289,26 @@ const Company = () => {
                 <td>{company.contactPersonName}</td>
                 <td>{company.contactPersonEmail}</td>
                 <td>{company.contactPersonPhone}</td>
-                <td>{company.logoFile && <img src={URL.createObjectURL(company.logoFile)} alt="Logo" className="logo-img" />}</td>
-                <td>
-                  <button onClick={() => handleEdit(index)}>Edit</button>
-                  <button onClick={() => handleDelete(index)}>Delete</button>
+                <td>{company.logoFile && (
+                  <img
+                    src={URL.createObjectURL(company.logoFile)}
+                    alt="Company Logo"
+                    className="company-logo"
+                  />
+                )}</td>
+                <td className='actions'>
+                  <button
+                    className="edit-button"
+                    onClick={() => handleEdit(index)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(index)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
