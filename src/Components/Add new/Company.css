@@ -1,3 +1,4 @@
+/* Form styles */
 .contact-form {
   max-width: 600px;
   margin: 40px auto;
@@ -30,7 +31,6 @@
   font-size: 20px;
   color: #007BFF;
 }
-
 
 .form-group input,
 .form-group select {
@@ -70,7 +70,6 @@ button:active {
   box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
 }
 
-
 @media (max-width: 600px) {
   .form-group {
     flex: 0 0 100%;
@@ -87,7 +86,6 @@ button:active {
   }
 }
 
-
 .upload-label {
   cursor: pointer;
   color: #007bff;
@@ -96,4 +94,90 @@ button:active {
 
 .file-input {
   display: none;
+}
+
+/* Table styles */
+.table-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  overflow-x: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.company-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.company-table th,
+.company-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.company-table th {
+  background-color: #007BFF;
+  color: white;
+  font-weight: bold;
+}
+
+.company-table td {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.company-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.company-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.company-table .actions {
+  display: flex;
+  gap: 10px; 
+}
+
+.company-table .actions button {
+  padding: 4px 8px; /* Reduced padding */
+  font-size: 12px; /* Reduced font size */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.company-table .actions button.edit {
+  background-color: #28a745;
+  color: white;
+}
+
+.company-table .actions button.edit:hover {
+  background-color: #218838;
+}
+
+.company-table .actions button.edit:active {
+  background-color: #1e7e34;
+}
+
+.company-table .actions button.delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.company-table .actions button.delete:hover {
+  background-color: #c82333;
+}
+
+.company-table .actions button.delete:active {
+  background-color: #bd2130;
+}
+
+.logo-img {
+  width: 50px;
+  height: auto;
+  border-radius: 4px;
 }
