@@ -1,191 +1,131 @@
-/* Form styles */
 .contact-form {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 30px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  flex: 0 0 calc(50% - 10px);
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  width: 50px;
+  text-align: center;
+  font-size: 20px;
+  color: #007BFF;
+}
+
+.form-group input,
+.form-group select {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+button {
+  width: 100%;
+  padding: 12px 0;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+button:active {
+  background-color: #004085;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+@media (max-width: 600px) {
   .form-group {
-    display: flex;
-    align-items: center;
-    flex: 0 0 calc(50% - 10px);
+    flex: 0 0 100%;
     margin-bottom: 20px;
   }
-  
+
   .form-group label {
-    width: 50px;
-    text-align: center;
-    font-size: 20px;
-    color: #007BFF;
-  }
-  
-  .form-group input,
-  .form-group select {
-    flex: 1;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  
-  .form-group input:focus,
-  .form-group select:focus {
-    border-color: #007BFF;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-  }
-  
-  button {
-    width: 100%;
-    padding: 12px 0;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
-  }
-  
-  button:active {
-    background-color: #004085;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
-  }
-  
-  @media (max-width: 600px) {
-    .form-group {
-      flex: 0 0 100%;
-      margin-bottom: 20px;
-    }
-  
-    .form-group label {
-      display: none;
-    }
-  
-    .form-group input,
-    .form-group select {
-      width: 100%;
-    }
-  }
-  
-  .upload-label {
-    cursor: pointer;
-    color: #007bff;
-    text-decoration: underline;
-  }
-  
-  .file-input {
     display: none;
   }
-  
- /* Table Container */
+
+  .form-group input,
+  .form-group select {
+    width: 100%;
+  }
+}
+
 .table-container {
-    max-width: 800px; /* Reduced width */
-    margin: 40px auto;
-    overflow-x: auto; /* Allows horizontal scrolling */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  margin: 60px 60px;
+  background-color: #007BFF;
+  padding: 20px;
+  border-radius: 8px;
 }
 
-.office-table {
-    width: 900px; /* Fixed width */
-    margin: 50px; /* Center the table */
-    padding-left: 80px;
-    border-collapse: collapse;
-    table-layout: fixed; /* Ensures consistent column widths */
+table {
+  width: 70%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: white;
+  border: none;
 }
 
-/* Table Header and Cells */
-.office-table th,
-.office-table td {
-    padding: 12px 15px;
-    text-align: left;
+th, td {
+  padding: 12px 15px;
+  border: none;
+  text-align: left;
 }
 
-.office-table th {
-    background-color: #007BFF; /* Blue background for header */
-    color: white;
-    font-weight: bold;
-    border: none; /* Remove border from headers */
+th {
+  background-color: #007BFF;
+  color: white;
 }
 
-.office-table td {
-    border-bottom: 1px solid #e0e0e0;
+.edit-button {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.office-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Light gray background for even rows */
-}
-
-.office-table tr:hover {
-    background-color: #f1f1f1; /* Slightly darker gray on hover */
-}
-
-/* Action Buttons */
-.office-table .actions {
-    display: flex;
-    gap: 10px;
-}
-
-.office-table .actions button {
-    padding: 6px 12px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
-    color: white; /* Ensures text color is white */
-}
-
-/* Edit button */
-.office-table .edit-button {
-    background-color: #28a745; /* Green background */
-}
-
-.office-table .edit-button:hover {
-    background-color: #218838;
-}
-
-.office-table .edit-button:active {
-    background-color: #1e7e34;
-}
-
-/* Delete button */
-.office-table .delete-button {
-    background-color: #dc3545; /* Red background */
-}
-
-.office-table .delete-button:hover {
-    background-color: #c82333;
-}
-
-.office-table .delete-button:active {
-    background-color: #bd2130;
-}
-
-/* Logo Image */
-.logo-img {
-    width: 50px;
-    height: auto;
-    border-radius: 4px;
+.delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
 }

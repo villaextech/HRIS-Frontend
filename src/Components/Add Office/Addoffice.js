@@ -58,8 +58,8 @@ const AddOffice = () => {
   };
 
   const handleEdit = (index) => {
-    setFormData(offices[index]);
     setEditIndex(index);
+    setFormData(offices[index]);
   };
 
   const handleDelete = (index) => {
@@ -243,7 +243,7 @@ const AddOffice = () => {
         </div>
         <button type="submit"><i className="fas fa-paper-plane"></i> {editIndex !== null ? 'Update' : 'Submit'}</button>
       </form>
-      <div className="office-table">
+      <div className="table-container">
         <table>
           <thead>
             <tr>
@@ -253,12 +253,15 @@ const AddOffice = () => {
               <th>Contact Phone Number</th>
               <th>Postal Address</th>
               <th>Office Manager</th>
+              <th>User Name</th>
+              <th>Password</th>
               <th>Office Description</th>
               <th>Office Hours</th>
-              <th>Region</th>
+              <th>Region/Zone</th>
               <th>Notes</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Edit</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -270,14 +273,28 @@ const AddOffice = () => {
                 <td>{office.contactPhoneNumber}</td>
                 <td>{office.postalAddress}</td>
                 <td>{office.officeManager}</td>
+                <td>{office.userName}</td>
+                <td>
+                  <input 
+                    type="password" 
+                    value={office.password} 
+                    readOnly 
+                  />
+                </td>
                 <td>{office.officeDescription}</td>
                 <td>{office.officeHours}</td>
                 <td>{office.region}</td>
                 <td>{office.notes}</td>
                 <td>{office.status}</td>
-                <td className='actions'>
-                  <button className='edit-button' onClick={() => handleEdit(index)}><i className="fas fa-edit"></i></button>
-                  <button className='delete-button ' onClick={() => handleDelete(index)}><i className="fas fa-trash"></i></button>
+                <td>
+                  <button onClick={() => handleEdit(index)} className="edit-button">
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button onClick={() => handleDelete(index)} className="delete-button">
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
