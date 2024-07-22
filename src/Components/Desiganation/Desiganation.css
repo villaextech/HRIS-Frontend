@@ -1,4 +1,4 @@
-.contact-form {
+.designation-form {
     max-width: 600px;
     margin: 40px auto;
     padding: 30px;
@@ -10,38 +10,29 @@
   }
   
   .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 20px;
   }
   
   .form-group {
     display: flex;
     align-items: center;
-    flex: 0 0 calc(50% - 10px);
-    margin-bottom: 20px;
   }
   
-  .form-group label {
-    width: 50px;
-    text-align: center;
+  .form-group .icon {
     font-size: 20px;
     color: #007BFF;
+    margin-right: 10px;
   }
   
-  .form-group input,
-  .form-group select {
-    flex: 1;
+  .form-group input {
     padding: 12px 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
   }
   
-  .form-group input:focus,
-  .form-group select:focus {
+  .form-group input:focus {
     border-color: #007BFF;
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
   }
@@ -69,62 +60,50 @@
     box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
   }
   
-  @media (max-width: 600px) {
-    .form-group {
-      flex: 0 0 100%;
-      margin-bottom: 20px;
-    }
-  
-    .form-group label {
-      display: none;
-    }
-  
-    .form-group input,
-    .form-group select {
-      width: 100%;
-    }
-  }
-  
-  .table-container {
-    width: 70%;
-    overflow-x: auto;
-    background-color: #007BFF;
-    margin-left: 180px;
-    border-radius: 8px;
-  }
-  
-  table {
+  .designation-table {
+    width: 40%; 
+    margin-left: 400px;
     border-collapse: collapse;
-    background-color: white;
-    border: none;
   }
   
-  th, td {
+  .designation-table th, .designation-table td {
     padding: 12px 15px;
-    border: none;
     text-align: left;
   }
   
-  th {
+  .designation-table th {
     background-color: #007BFF;
     color: white;
   }
-  
-  .edit-button {
-    background-color: green;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
+  .designation-table .actions {
+    display: flex;
+    gap: 10px; /* Space between buttons */
   }
   
-  .delete-button {
-    background-color: red;
-    color: white;
+  .designation-table .edit-button, .designation-table .delete-button {
     border: none;
-    padding: 8px 12px;
     border-radius: 4px;
+    padding: 8px 12px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .designation-table .edit-button {
+    background-color: #28a745;
+  }
+  
+  .designation-table .edit-button:hover {
+    background-color: #218838;
+  }
+  
+  .designation-table .delete-button {
+    background-color: #dc3545;
+  }
+  
+  .designation-table .delete-button:hover {
+    background-color: #c82333;
   }
   
