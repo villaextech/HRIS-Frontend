@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './Desiganation.css';
 
@@ -9,6 +9,21 @@ const Desiganation = () => {
   });
 
   const [designations, setDesignations] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
+
+  useEffect(() => {
+    fetchDesignations();
+  }, []);
+
+  const fetchDesignations = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/designations/');
+      const data = await response.json();
+      setDesignations(data);
+    } catch (error) {
+      console.error('Error fetching designations:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,23 +33,68 @@ const Desiganation = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setDesignations([...designations, formData]);
-    setFormData({
-      designationTitle: '',
-      designationDescription: ''
-    });
+    try {
+      if (editIndex !== null) {
+        const designationToEdit = designations[editIndex];
+        const response = await fetch(`http://127.0.0.1:8000/api/designations/${designationToEdit.id}/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: formData.designationTitle,
+            description: formData.designationDescription
+          })
+        });
+        const updatedDesignation = await response.json();
+        const updatedDesignations = [...designations];
+        updatedDesignations[editIndex] = updatedDesignation;
+        setDesignations(updatedDesignations);
+      } else {
+        const response = await fetch('http://127.0.0.1:8000/api/designations/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            title: formData.designationTitle,
+            description: formData.designationDescription
+          })
+        });
+        const newDesignation = await response.json();
+        setDesignations([...designations, newDesignation]);
+      }
+      setFormData({
+        designationTitle: '',
+        designationDescription: ''
+      });
+      setEditIndex(null);
+    } catch (error) {
+      console.error('Error submitting designation:', error);
+    }
   };
 
   const handleEdit = (index) => {
     const designationToEdit = designations[index];
-    setFormData(designationToEdit);
-    setDesignations(designations.filter((_, i) => i !== index));
+    setFormData({
+      designationTitle: designationToEdit.title,
+      designationDescription: designationToEdit.description
+    });
+    setEditIndex(index);
   };
 
-  const handleDelete = (index) => {
-    setDesignations(designations.filter((_, i) => i !== index));
+  const handleDelete = async (index) => {
+    const designationToDelete = designations[index];
+    try {
+      await fetch(`http://127.0.0.1:8000/api/designations/${designationToDelete.id}/`, {
+        method: 'DELETE'
+      });
+      setDesignations(designations.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error('Error deleting designation:', error);
+    }
   };
 
   return (
@@ -69,7 +129,7 @@ const Desiganation = () => {
           </div>
         </div>
         <button type="submit">
-          <i className="fas fa-paper-plane"></i> Submit
+          <i className="fas fa-paper-plane"></i> {editIndex !== null ? 'Update' : 'Submit'}
         </button>
       </form>
 
@@ -84,8 +144,8 @@ const Desiganation = () => {
         <tbody>
           {designations.map((designation, index) => (
             <tr key={index}>
-              <td>{designation.designationTitle}</td>
-              <td>{designation.designationDescription}</td>
+              <td>{designation.title}</td>
+              <td>{designation.description}</td>
               <td className="actions">
                 <button className="edit-button" onClick={() => handleEdit(index)}>
                   <i className="fas fa-edit"></i> Edit

@@ -86,15 +86,15 @@ button:active {
 }
 
 .table-container {
+  width: 70%;
+  margin-left: 200px;
   overflow-x: auto;
-  margin: 70px 70px;
   background-color: #007BFF;
   padding: 20px;
   border-radius: 8px;
 }
 
 table {
-  width: 70%;
   margin: 0 auto;
   border-collapse: collapse;
   background-color: white;

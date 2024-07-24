@@ -1,9 +1,9 @@
 import React from 'react'
-import Addoffice from './Components/Office/Addoffice'
+import Department from './Components/Department/Department'
 const App = () => {
   return (
     <div>
-      <Addoffice/>
+ <Department/>
     </div>
   )
 }

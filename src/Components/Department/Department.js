@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './Department.css';
 
@@ -16,7 +16,21 @@ const Department = () => {
   const [departments, setDepartments] = useState([]);
   const [offices, setOffices] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
-  const [newOffice, setNewOffice] = useState('');
+
+  useEffect(() => {
+    // Fetch offices from API when component mounts
+    const fetchOffices = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/offices/');
+        const data = await response.json();
+        setOffices(data.map(office => office.office_name)); // Adjust based on the actual response structure
+      } catch (error) {
+        console.error('Error fetching offices:', error);
+      }
+    };
+
+    fetchOffices();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,43 +40,35 @@ const Department = () => {
     });
   };
 
-  const handleNewOfficeChange = (e) => {
-    setNewOffice(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Update office list if a new office is provided and not already in the list
-    if (newOffice && !offices.includes(newOffice)) {
-      setOffices([...offices, newOffice]);
+
+    try {
+      if (editIndex !== null) {
+        // Update department
+        const updatedDepartments = departments.map((department, index) =>
+          index === editIndex ? formData : department
+        );
+        setDepartments(updatedDepartments);
+        setEditIndex(null);
+      } else {
+        // Add new department
+        setDepartments([...departments, formData]);
+      }
+
+      // Reset form data
       setFormData({
-        ...formData,
-        office: newOffice
+        departmentName: '',
+        departmentDescription: '',
+        departmentHead: '',
+        office: '',
+        contactEmail: '',
+        contactPhoneNumber: '',
+        status: 'active'
       });
-      setNewOffice('');
+    } catch (error) {
+      console.error('Error submitting department:', error);
     }
-
-    // Allow form submission even if office is not selected or new office is not added
-    if (editIndex !== null) {
-      const updatedDepartments = departments.map((department, index) =>
-        index === editIndex ? formData : department
-      );
-      setDepartments(updatedDepartments);
-      setEditIndex(null);
-    } else {
-      setDepartments([...departments, formData]);
-    }
-
-    setFormData({
-      departmentName: '',
-      departmentDescription: '',
-      departmentHead: '',
-      office: '',
-      contactEmail: '',
-      contactPhoneNumber: '',
-      status: 'active'
-    });
   };
 
   return (
@@ -96,7 +102,7 @@ const Department = () => {
         </div>
 
         <div className="form-row">
-        <div className="form-group">
+          <div className="form-group">
             <label htmlFor="departmentHead"><i className="fas fa-user"></i></label>
             <input
               type="text"
@@ -119,34 +125,6 @@ const Department = () => {
             >
               <option value="active">Active</option>
               <option value="deactive">Deactive</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="form-row">
-        <div className="form-group">
-            <label htmlFor="newOffice"><i className="fas fa-plus-circle"></i></label>
-            <input
-              type="text"
-              id="newOffice"
-              name="newOffice"
-              placeholder="Add New Office (optional)"
-              value={newOffice}
-              onChange={handleNewOfficeChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="office"><i className="fas fa-building"></i></label>
-            <select
-              id="office"
-              name="office"
-              value={formData.office}
-              onChange={handleChange}
-            >
-              <option value="">Select Office (optional)</option>
-              {offices.map((office, index) => (
-                <option key={index} value={office}>{office}</option>
-              ))}
             </select>
           </div>
         </div>
@@ -175,8 +153,22 @@ const Department = () => {
               required
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="office"><i className="fas fa-building"></i></label>
+            <select
+              id="office"
+              name="office"
+              value={formData.office}
+              onChange={handleChange}
+            >
+              <option value="">Select Office</option>
+              {offices.map((office, index) => (
+                <option key={index} value={office}>{office}</option>
+              ))}
+            </select>
+          </div>
         </div>
-       
+
         <button type="submit"><i className="fas fa-paper-plane"></i> {editIndex !== null ? 'Update' : 'Submit'}</button>
       </form>
 

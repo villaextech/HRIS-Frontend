@@ -1,70 +1,132 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './Addoffice.css';
 
 const AddOffice = () => {
   const [formData, setFormData] = useState({
-    officeName: '',
-    officeAddress: '',
-    contactEmail: '',
-    contactPhoneNumber: '',
-    postalAddress: '',
-    officeManager: '',
-    userName: '',
+    office_name: '',
+    office_address: '',
+    contact_email: '',
+    contact_phone_number: '',
+    postal_address: '',
+    office_manager_name: '',
+    username: '',
     password: '',
-    officeDescription: '',
-    officeHours: '',
+    office_description: '',
+    office_hours: '',
     region: '',
     notes: '',
-    status: 'active'
+    status: true
   });
   const [offices, setOffices] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
 
+  useEffect(() => {
+    fetchOffices();
+  }, []);
+
+  const fetchOffices = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/offices/');
+      const data = await response.json();
+      setOffices(data);
+    } catch (error) {
+      console.error('Error fetching offices:', error);
+    }
+  };
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editIndex !== null) {
-      const updatedOffices = offices.map((office, index) => 
-        index === editIndex ? formData : office
-      );
-      setOffices(updatedOffices);
+    try {
+      const processedFormData = {
+        ...formData,
+        status: formData.status ? true : false
+      };
+
+      if (editIndex !== null) {
+        const officeToEdit = offices[editIndex];
+        const response = await fetch(`http://127.0.0.1:8000/api/offices/${officeToEdit.id}/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(processedFormData)
+        });
+        const updatedOffice = await response.json();
+        const updatedOffices = [...offices];
+        updatedOffices[editIndex] = updatedOffice;
+        setOffices(updatedOffices);
+      } else {
+        const response = await fetch('http://127.0.0.1:8000/api/offices/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(processedFormData)
+        });
+        const newOffice = await response.json();
+        setOffices([...offices, newOffice]);
+      }
+
+      setFormData({
+        office_name: '',
+        office_address: '',
+        contact_email: '',
+        contact_phone_number: '',
+        postal_address: '',
+        office_manager_name: '',
+        username: '',
+        password: '',
+        office_description: '',
+        office_hours: '',
+        region: '',
+        notes: '',
+        status: true
+      });
       setEditIndex(null);
-    } else {
-      setOffices([...offices, formData]);
+    } catch (error) {
+      console.error('Error submitting office:', error);
     }
-    setFormData({
-      officeName: '',
-      officeAddress: '',
-      contactEmail: '',
-      contactPhoneNumber: '',
-      postalAddress: '',
-      officeManager: '',
-      userName: '',
-      password: '',
-      officeDescription: '',
-      officeHours: '',
-      region: '',
-      notes: '',
-      status: 'active'
-    });
   };
 
   const handleEdit = (index) => {
+    const officeToEdit = offices[index];
+    setFormData({
+      office_name: officeToEdit.office_name,
+      office_address: officeToEdit.office_address,
+      contact_email: officeToEdit.contact_email,
+      contact_phone_number: officeToEdit.contact_phone_number,
+      postal_address: officeToEdit.postal_address,
+      office_manager_name: officeToEdit.office_manager_name,
+      username: officeToEdit.username,
+      password: officeToEdit.password,
+      office_description: officeToEdit.office_description,
+      office_hours: officeToEdit.office_hours,
+      region: officeToEdit.region,
+      notes: officeToEdit.notes || '',
+      status: officeToEdit.status
+    });
     setEditIndex(index);
-    setFormData(offices[index]);
   };
 
-  const handleDelete = (index) => {
-    const updatedOffices = offices.filter((_, i) => i !== index);
-    setOffices(updatedOffices);
+  const handleDelete = async (index) => {
+    const officeToDelete = offices[index];
+    try {
+      await fetch(`http://127.0.0.1:8000/api/offices/${officeToDelete.id}/`, {
+        method: 'DELETE'
+      });
+      setOffices(offices.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error('Error deleting office:', error);
+    }
   };
 
   return (
@@ -73,25 +135,25 @@ const AddOffice = () => {
         {/* Form fields */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="officeName"><i className="fas fa-building"></i></label>
+            <label htmlFor="office_name"><i className="fas fa-building"></i></label>
             <input
               type="text"
-              id="officeName"
-              name="officeName"
+              id="office_name"
+              name="office_name"
               placeholder="Office Name"
-              value={formData.officeName}
+              value={formData.office_name}
               onChange={handleChange}
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="officeAddress"><i className="fas fa-map-marker-alt"></i></label>
+            <label htmlFor="office_address"><i className="fas fa-map-marker-alt"></i></label>
             <input
               type="text"
-              id="officeAddress"
-              name="officeAddress"
+              id="office_address"
+              name="office_address"
               placeholder="Office Address"
-              value={formData.officeAddress}
+              value={formData.office_address}
               onChange={handleChange}
               required
             />
@@ -99,25 +161,25 @@ const AddOffice = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="contactEmail"><i className="fas fa-envelope"></i></label>
+            <label htmlFor="contact_email"><i className="fas fa-envelope"></i></label>
             <input
               type="email"
-              id="contactEmail"
-              name="contactEmail"
+              id="contact_email"
+              name="contact_email"
               placeholder="Contact Email"
-              value={formData.contactEmail}
+              value={formData.contact_email}
               onChange={handleChange}
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="contactPhoneNumber"><i className="fas fa-phone"></i></label>
+            <label htmlFor="contact_phone_number"><i className="fas fa-phone"></i></label>
             <input
               type="text"
-              id="contactPhoneNumber"
-              name="contactPhoneNumber"
+              id="contact_phone_number"
+              name="contact_phone_number"
               placeholder="Contact Phone Number"
-              value={formData.contactPhoneNumber}
+              value={formData.contact_phone_number}
               onChange={handleChange}
               required
             />
@@ -125,25 +187,25 @@ const AddOffice = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="postalAddress"><i className="fas fa-mail-bulk"></i></label>
+            <label htmlFor="postal_address"><i className="fas fa-mail-bulk"></i></label>
             <input
               type="text"
-              id="postalAddress"
-              name="postalAddress"
+              id="postal_address"
+              name="postal_address"
               placeholder="Postal Address"
-              value={formData.postalAddress}
+              value={formData.postal_address}
               onChange={handleChange}
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="officeManager"><i className="fas fa-user"></i></label>
+            <label htmlFor="office_manager_name"><i className="fas fa-user"></i></label>
             <input
               type="text"
-              id="officeManager"
-              name="officeManager"
+              id="office_manager_name"
+              name="office_manager_name"
               placeholder="Office Manager"
-              value={formData.officeManager}
+              value={formData.office_manager_name}
               onChange={handleChange}
               required
             />
@@ -151,13 +213,13 @@ const AddOffice = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="userName"><i className="fas fa-user-circle"></i></label>
+            <label htmlFor="username"><i className="fas fa-user-circle"></i></label>
             <input
               type="text"
-              id="userName"
-              name="userName"
+              id="username"
+              name="username"
               placeholder="User Name"
-              value={formData.userName}
+              value={formData.username}
               onChange={handleChange}
               required
             />
@@ -177,25 +239,25 @@ const AddOffice = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="officeDescription"><i className="fas fa-info-circle"></i></label>
+            <label htmlFor="office_description"><i className="fas fa-info-circle"></i></label>
             <input
               type="text"
-              id="officeDescription"
-              name="officeDescription"
+              id="office_description"
+              name="office_description"
               placeholder="Office Description"
-              value={formData.officeDescription}
+              value={formData.office_description}
               onChange={handleChange}
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="officeHours"><i className="fas fa-clock"></i></label>
+            <label htmlFor="office_hours"><i className="fas fa-clock"></i></label>
             <input
               type="text"
-              id="officeHours"
-              name="officeHours"
+              id="office_hours"
+              name="office_hours"
               placeholder="Office Hours"
-              value={formData.officeHours}
+              value={formData.office_hours}
               onChange={handleChange}
               required
             />
@@ -232,8 +294,8 @@ const AddOffice = () => {
             <select
               id="status"
               name="status"
-              value={formData.status}
-              onChange={handleChange}
+              value={formData.status ? 'active' : 'deactive'}
+              onChange={(e) => handleChange({ target: { name: 'status', value: e.target.value === 'active' } })}
               required
             >
               <option value="active">Active</option>
@@ -267,13 +329,13 @@ const AddOffice = () => {
           <tbody>
             {offices.map((office, index) => (
               <tr key={index}>
-                <td>{office.officeName}</td>
-                <td>{office.officeAddress}</td>
-                <td>{office.contactEmail}</td>
-                <td>{office.contactPhoneNumber}</td>
-                <td>{office.postalAddress}</td>
-                <td>{office.officeManager}</td>
-                <td>{office.userName}</td>
+                <td>{office.office_name}</td>
+                <td>{office.office_address}</td>
+                <td>{office.contact_email}</td>
+                <td>{office.contact_phone_number}</td>
+                <td>{office.postal_address}</td>
+                <td>{office.office_manager_name}</td>
+                <td>{office.username}</td>
                 <td>
                   <input 
                     type="password" 
@@ -281,11 +343,11 @@ const AddOffice = () => {
                     readOnly 
                   />
                 </td>
-                <td>{office.officeDescription}</td>
-                <td>{office.officeHours}</td>
+                <td>{office.office_description}</td>
+                <td>{office.office_hours}</td>
                 <td>{office.region}</td>
                 <td>{office.notes}</td>
-                <td>{office.status}</td>
+                <td>{office.status ? 'Active' : 'Deactive'}</td>
                 <td>
                   <button onClick={() => handleEdit(index)} className="edit-button">
                     Edit
