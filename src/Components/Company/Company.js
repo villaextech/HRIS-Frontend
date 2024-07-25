@@ -14,49 +14,29 @@ const Company = () => {
     contactPersonEmail: '',
     contactPersonPhone: ''
   });
-
-  const [countryCodes, setCountryCodes] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState({ name: '', code: '' });
-  const [contactNumber, setContactNumber] = useState("");
-  const [logoFile, setLogoFile] = useState(null); // State for logo file
-  const [companies, setCompanies] = useState([]); // State for submitted companies
-  const [editIndex, setEditIndex] = useState(null); // State for tracking the editing index
+  const [logoFile, setLogoFile] = useState(null);
+  const [companies, setCompanies] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
 
   useEffect(() => {
-    fetch('https://restcountries.com/v3.1/all')
-      .then(response => response.json())
-      .then(data => {
-        const codes = data.map(country => ({
-          name: country.name.common,
-          code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : "")
-        }));
-        setCountryCodes(codes);
-      })
-      .catch(error => console.error('Error fetching country codes:', error));
+    fetchCompanies(); // Fetch companies on component mount
   }, []);
+
+  const fetchCompanies = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/tenants/');
+      const data = await response.json();
+      setCompanies(data);
+    } catch (error) {
+      console.error('Error fetching companies:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value
-    });
-
-    if (name === 'contact') {
-      setContactNumber(value.replace(selectedCountry.code, ''));
-    }
-  };
-
-  const handleCountryCodeChange = (e) => {
-    const selectedCode = e.target.value;
-    const selectedCountry = countryCodes.find(country => country.code === selectedCode);
-    setSelectedCountry(selectedCountry);
-
-    setFormData({
-      ...formData,
-      country: selectedCountry.name,
-      contact: `${selectedCode} ${contactNumber}`
     });
   };
 
@@ -65,47 +45,88 @@ const Company = () => {
     setLogoFile(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editIndex !== null) {
-      // Editing an existing company
-      const updatedCompanies = companies.map((company, index) =>
-        index === editIndex ? { ...formData, logoFile } : company
-      );
-      setCompanies(updatedCompanies);
-      setEditIndex(null);
-    } else {
-      // Adding a new company
-      setCompanies([...companies, { ...formData, logoFile }]);
+    const formDataWithFile = new FormData();
+    formDataWithFile.append('t_name', formData.name);
+    formDataWithFile.append('area', formData.area);
+    formDataWithFile.append('city', formData.city);
+    formDataWithFile.append('country', formData.country);
+    formDataWithFile.append('t_contact', formData.contact);
+    formDataWithFile.append('t_email', formData.email);
+    formDataWithFile.append('t_contact_person_name', formData.contactPersonName);
+    formDataWithFile.append('t_contact_person_contact', formData.contactPersonPhone);
+    formDataWithFile.append('t_contact_person_email', formData.contactPersonEmail);
+    if (logoFile) {
+      formDataWithFile.append('logo', logoFile);
     }
-    setFormData({
-      name: '',
-      email: '',
-      area: '',
-      city: '',
-      country: '',
-      contact: '',
-      contactPersonName: '',
-      contactPersonEmail: '',
-      contactPersonPhone: ''
-    });
-    setLogoFile(null);
+
+    try {
+      let response;
+      if (editIndex !== null) {
+        const companyToEdit = companies[editIndex];
+        response = await fetch(`http://127.0.0.1:8000/api/tenants/${companyToEdit.id}/`, {
+          method: 'PUT',
+          body: formDataWithFile
+        });
+        const updatedCompany = await response.json();
+        const updatedCompanies = [...companies];
+        updatedCompanies[editIndex] = updatedCompany;
+        setCompanies(updatedCompanies);
+      } else {
+        response = await fetch('http://127.0.0.1:8000/api/tenants/', {
+          method: 'POST',
+          body: formDataWithFile
+        });
+        const newCompany = await response.json();
+        setCompanies([...companies, newCompany]);
+      }
+
+      setFormData({
+        name: '',
+        email: '',
+        area: '',
+        city: '',
+        country: '',
+        contact: '',
+        contactPersonName: '',
+        contactPersonEmail: '',
+        contactPersonPhone: ''
+      });
+      setLogoFile(null);
+      setEditIndex(null);
+    } catch (error) {
+      console.error('Error submitting company:', error);
+    }
   };
 
   const handleEdit = (index) => {
-    setFormData(companies[index]);
-    setLogoFile(companies[index].logoFile);
+    setFormData({
+      name: companies[index].t_name,
+      email: companies[index].t_email,
+      area: companies[index].area,
+      city: companies[index].city,
+      country: companies[index].country,
+      contact: companies[index].t_contact,
+      contactPersonName: companies[index].t_contact_person_name,
+      contactPersonEmail: companies[index].t_contact_person_email,
+      contactPersonPhone: companies[index].t_contact_person_contact
+    });
+    setLogoFile(null);
     setEditIndex(index);
   };
 
-  const handleDelete = (index) => {
-    const updatedCompanies = companies.filter((_, i) => i !== index);
-    setCompanies(updatedCompanies);
+  const handleDelete = async (index) => {
+    const companyToDelete = companies[index];
+    try {
+      await fetch(`http://127.0.0.1:8000/api/tenants/${companyToDelete.id}/`, {
+        method: 'DELETE'
+      });
+      setCompanies(companies.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error('Error deleting company:', error);
+    }
   };
-
-  const filteredCountryCodes = countryCodes.filter(country =>
-    country.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div>
@@ -138,43 +159,13 @@ const Company = () => {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="search"><i className="fas fa-search"></i></label>
+            <label htmlFor="country"><i className="fas fa-flag"></i></label>
             <input
               type="text"
-              id="search"
-              placeholder="Search Country"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <div className="form-group" style={{ width: '40%' }}>
-            <label htmlFor="country"><i className="fas fa-flag"></i></label>
-            <select
               id="country"
               name="country"
-              value={selectedCountry.code}
-              onChange={handleCountryCodeChange}
-              required
-              style={{ width: '100%' }}
-            >
-              <option value="">Select a country</option>
-              {filteredCountryCodes.map((country, index) => (
-                <option key={index} value={country.code}>
-                  {country.name} ({country.code})
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="contact"><i className="fas fa-phone"></i></label>
-            <input
-              type="text"
-              id="contact"
-              name="contact"
-              placeholder="Company Contact"
-              value={formData.contact}
+              placeholder="Country"
+              value={formData.country}
               onChange={handleChange}
               required
             />
@@ -193,7 +184,8 @@ const Company = () => {
           </div>
         </div>
         <div className="form-row">
-          <div className="form-group">
+
+        <div className="form-group">
             <label htmlFor="area"><i className="fas fa-map-marked-alt"></i></label>
             <input
               type="text"
@@ -206,6 +198,23 @@ const Company = () => {
             />
           </div>
           <div className="form-group">
+            <label htmlFor="contact"><i className="fas fa-phone"></i></label>
+            <input
+              type="text"
+              id="contact"
+              name="contact"
+              placeholder="Company Contact"
+              value={formData.contact}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          
+
+        </div>
+        <div className="form-row">
+         
+          <div className="form-group">
             <label htmlFor="contactPersonName"><i className="fas fa-user"></i></label>
             <input
               type="text"
@@ -217,8 +226,6 @@ const Company = () => {
               required
             />
           </div>
-        </div>
-        <div className="form-row">
           <div className="form-group">
             <label htmlFor="contactPersonEmail"><i className="fas fa-envelope"></i></label>
             <input
@@ -231,6 +238,9 @@ const Company = () => {
               required
             />
           </div>
+        </div>
+        <div className="form-row">
+          
           <div className="form-group">
             <label htmlFor="contactPersonPhone"><i className="fas fa-phone"></i></label>
             <input
@@ -253,11 +263,10 @@ const Company = () => {
               name="logo"
               accept=".png, .jpg, .jpeg"
               onChange={handleLogoChange}
-              required
             />
           </div>
         </div>
-        <button type="submit"><i className="fas fa-paper-plane"></i> Submit</button>
+        <button type="submit"><i className="fas fa-paper-plane"></i> {editIndex !== null ? 'Update' : 'Submit'}</button>
       </form>
 
       <div className="table-container">
@@ -273,42 +282,24 @@ const Company = () => {
               <th>Contact Person Name</th>
               <th>Contact Person Email</th>
               <th>Contact Person Phone</th>
-              <th>Logo</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {companies.map((company, index) => (
-              <tr key={index}>
-                <td>{company.name}</td>
-                <td>{company.email}</td>
+              <tr key={company.id}>
+                <td>{company.t_name}</td>
+                <td>{company.t_email}</td>
                 <td>{company.area}</td>
                 <td>{company.city}</td>
                 <td>{company.country}</td>
-                <td>{company.contact}</td>
-                <td>{company.contactPersonName}</td>
-                <td>{company.contactPersonEmail}</td>
-                <td>{company.contactPersonPhone}</td>
-                <td>{company.logoFile && (
-                  <img
-                    src={URL.createObjectURL(company.logoFile)}
-                    alt="Company Logo"
-                    className="company-logo"
-                  />
-                )}</td>
-                <td className='actions'>
-                  <button
-                    className="edit-button"
-                    onClick={() => handleEdit(index)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="delete-button"
-                    onClick={() => handleDelete(index)}
-                  >
-                    Delete
-                  </button>
+                <td>{company.t_contact}</td>
+                <td>{company.t_contact_person_name}</td>
+                <td>{company.t_contact_person_email}</td>
+                <td>{company.t_contact_person_contact}</td>
+                <td>
+                  <button onClick={() => handleEdit(index)} className="edit-button"><i className="fas fa-edit"></i></button>
+                  <button onClick={() => handleDelete(index)} className="delete-button"><i className="fas fa-trash"></i></button>
                 </td>
               </tr>
             ))}

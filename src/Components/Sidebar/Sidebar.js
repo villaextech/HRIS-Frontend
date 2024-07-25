@@ -1,12 +1,9 @@
-// Sidebar.js
-
 import React, { useState } from 'react';
 import './Sidebar.css'; // Import your Sidebar-specific CSS
 import 'boxicons/css/boxicons.min.css';
 
 const Sidebar = () => {
   const [isSidebarClosed, setSidebarClosed] = useState(true);
-  const [isDarkMode, setDarkMode] = useState(false);
 
   const handleToggleClick = () => {
     setSidebarClosed(!isSidebarClosed);
@@ -16,12 +13,8 @@ const Sidebar = () => {
     setSidebarClosed(false);
   };
 
-  const handleModeSwitchClick = () => {
-    setDarkMode(!isDarkMode);
-  };
-
   return (
-    <div className={`body ${isDarkMode ? 'dark' : ''}`}>
+    <div className="body">
       <nav className={`sidebar ${isSidebarClosed ? 'close' : ''}`}>
         <header>
           <div className="image-text">
@@ -30,7 +23,7 @@ const Sidebar = () => {
             </span>
             <div className="text logo-text">
               <span className="name">Villaex</span>
-              <span className="profession">Management System</span>
+              <span className="profession">Technologies</span>
             </div>
           </div>
           <i className='bx bx-chevron-right toggle' onClick={handleToggleClick}></i>
@@ -80,26 +73,13 @@ const Sidebar = () => {
                   <span className="text nav-text">Likes</span>
                 </a>
               </li>
+              <li className="nav-link">
+                <a href="/settings">
+                  <i className='bx bx-cog icon'></i>
+                  <span className="text nav-text">Settings</span>
+                </a>
+              </li>
             </ul>
-          </div>
-
-          <div className="bottom-content">
-            <li>
-              <a href="/logout">
-                <i className='bx bx-log-out icon'></i>
-                <span className="text nav-text">Logout</span>
-              </a>
-            </li>
-
-            <li className="mode">
-              <div className="sun-moon">
-                <i className={`bx ${isDarkMode ? 'bx-moon' : 'bx-sun'} icon`}></i>
-              </div>
-              <span className="mode-text text">{isDarkMode ? 'Light mode' : 'Dark mode'}</span>
-              <div className="toggle-switch" onClick={handleModeSwitchClick}>
-                <span className="switch"></span>
-              </div>
-            </li>
           </div>
         </div>
       </nav>
