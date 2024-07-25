@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Sidebar.css'; // Import your Sidebar-specific CSS
 import 'boxicons/css/boxicons.min.css';
 
@@ -37,47 +38,38 @@ const Sidebar = () => {
             </li>
 
             <ul className="menu-links">
-              <li className="nav-link">
-                <a href="/dashboard">
-                  <i className='bx bx-home-alt icon'></i>
-                  <span className="text nav-text">Dashboard</span>
-                </a>
-              </li>
-              <li className="nav-link">
-                <a href="/company">
-                  <i className='bx bx-bar-chart-alt-2 icon'></i>
-                  <span className="text nav-text">Company</span>
-                </a>
-              </li>
-              <li className="nav-link">
-                <a href="/department">
-                  <i className='bx bx-wallet icon'></i>
-                  <span className="text nav-text">Department</span>
-                </a>
-              </li>
-              <li className="nav-link">
-                <a href="/notifications">
-                  <i className='bx bx-bell icon'></i>
-                  <span className="text nav-text">Notifications</span>
-                </a>
-              </li>
-              <li className="nav-link">
-                <a href="/analytics">
-                  <i className='bx bx-pie-chart-alt icon'></i>
-                  <span className="text nav-text">Analytics</span>
-                </a>
-              </li>
-              <li className="nav-link">
-                <a href="/likes">
-                  <i className='bx bx-heart icon'></i>
-                  <span className="text nav-text">Likes</span>
-                </a>
-              </li>
-              <li className="nav-link">
-                <a href="/settings">
+
+              <li className="nav-link has-dropdown">
+                <Link to="/company">
                   <i className='bx bx-cog icon'></i>
                   <span className="text nav-text">Settings</span>
-                </a>
+                </Link>
+                <ul className="dropdown">
+                  <li>
+                    <Link to="/company">
+                      <i className='bx bx-buildings icon'></i>
+                      <span className="text nav-text">Company</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/office">
+                      <i className='bx bx-home-alt icon'></i>
+                      <span className="text nav-text">Office</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/department">
+                      <i className='bx bx-building icon'></i>
+                      <span className="text nav-text">Department</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/designation">
+                      <i className='bx bx-id-card icon'></i>
+                      <span className="text nav-text">Designation</span>
+                    </Link>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>
