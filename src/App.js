@@ -1,9 +1,9 @@
 import React from 'react'
-import Department from './Components/Department/Department'
+import Company from './Components/Company/Company'
 const App = () => {
   return (
     <div>
- <Department/>
+ <Company/>
     </div>
   )
 }
