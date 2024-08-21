@@ -1,0 +1,34 @@
+body {
+  font-family: 'Nunito', sans-serif;
+}
+.pagination-container {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background-color:  #3B8682; /* Primary blue color */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+  background-color:  #3B8682; /* Darker blue for hover effect */
+}
+
+.pagination-button:disabled {
+  background-color: #cccccc; /* Light gray for disabled button */
+  cursor: not-allowed;
+}
+
+.pagination-button.active {
+  background-color: #3B8682; /* Darker blue for active page */
+  font-weight: bold;
+  cursor: default;}

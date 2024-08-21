@@ -1,0 +1,174 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Nunito', sans-serif;
+}
+
+.background {
+  background: url('../img/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  width: 1253.33px;
+  height: 814px;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 459.22px;
+  height: 814px;
+  background-color: #FFFFFF;
+}
+
+.Logo {
+  width: 311.7px;
+  height: 95.72px;
+  margin: 135px 73px 0 73px;
+}
+
+.p1 {
+  font-family: Nunito;
+  font-size: 24.87px;
+  font-weight: 400;
+  line-height: 36.47px;
+  letter-spacing: -0.5305092334747314px;
+  text-align: left;
+  color: #3B8682;
+  margin: 58px 70px 0 69px;
+}
+
+.p1 span {
+  color: #DAB943;
+}
+
+.p2 {
+  font-family: Nunito;
+  font-size: 49.74px;
+  font-weight: 400;
+  line-height: 58.02px;
+  letter-spacing: -1.1107536554336548px;
+  text-align: left;
+  color: #3B8682;
+  margin-top: 29px;
+  margin-left: 70px;
+}
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.i1 {
+  width: 319.13px;
+  height: 49.74px;
+  border-radius: 8.29px;
+  border: 1.66px solid #C4C4C4;
+  margin: 8px 70px 0px 68px;
+  box-sizing: border-box;
+  padding-inline: 20px;
+}
+.password-toggle-icon {
+  position: absolute;
+  right: 90px;
+  margin-top: 10px;
+  cursor: pointer;
+  color: #3B8682;
+}
+.options {
+  width: 350.96px;
+  height: 29px;
+  gap: 73.77px;
+  opacity: 0px;
+  margin-top: 12px;
+  margin-left: 60px;
+  display: flex;
+}
+.error-message {
+  color: red;
+  margin: 8px 70px 0px 68px;
+  font-size: 14px;
+}
+
+.remember-me {
+  margin-top: 12px;
+  color: #3B8682;
+}
+.remember-me input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.remember-me {
+  position: relative;
+  padding-left: 25px;
+  margin-top: 12px;
+  color: #3B8682;
+  display: flex;
+  align-items: center;
+}
+
+.remember-me label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #DAB943;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.remember-me input[type="checkbox"]:checked + label::before {
+  background-color: #DAB943;
+}
+
+.remember-me input[type="checkbox"]:checked + label::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.forgot-password {
+  position: relative;
+  padding-left: 25px;
+  margin-top: 12px;
+  color: #3B8682;
+  display: flex;
+  align-items: center;
+}
+.login-button {
+  width: 330.13px;
+  height: 53.05px;
+  background: #DAB943;
+  color: white;
+  border-radius: 8.29px;
+  border: none; /* Remove the border */
+  margin: 17px 70px 0px 60px;
+  transition: background-color 0.3s ease; /* Add a smooth transition for the background color */
+}
+
+.login-button:hover,
+.login-button:active {
+  background: #DAB943; /* Ensure the color stays the same on hover and active */
+}
+
+.l1 {
+  font-family: Nunito;
+  font-size: 16.58px;
+  font-weight: 800;
+  line-height: 28.18px;
+  letter-spacing: -0.2735438048839569px;
+  text-align: left;
+}
