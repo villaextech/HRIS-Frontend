@@ -1,3 +1,7 @@
+
+# HRIS-Frontend
+Front End Repository for Hiring Resource Information System Project
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
