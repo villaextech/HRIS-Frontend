@@ -22,11 +22,11 @@ th,
 .search-input {
   margin-left: 760px;
 }
-.modal-content {
-  width: 700px;
-  height: 500px;
+.c1 {
+  width: 650px;
+  height: 400px;
 }
-.modal-body {
+.c2 {
   width: 700px;
   margin-bottom: 90px;
 }

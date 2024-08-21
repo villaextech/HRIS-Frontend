@@ -212,17 +212,19 @@ const AddOffice = () => {
   return (
     <div className="main">
       <div className="container mt-4">
-        <div className="d-flex justify-content-between mb-3">
-          <input
-            type="text"
-            placeholder="Search offices..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="form-control"
-          />
-          <button className="btn add1" onClick={openForm}>
-            <i className="fas fa-plus"></i> Add Office
-          </button>
+        <div className="d-flex flex-column">
+          <div className="d-flex justify-content-between mb-3">
+            <input
+              type="text"
+              placeholder="Search offices"
+              value={searchTerm}
+              onChange={handleSearch}
+              className="form-control search-input"
+            />
+            <button className="btn add1" onClick={openForm}>
+              <i className="fas fa-plus"></i> Add
+            </button>
+          </div>
         </div>
 
         {loading && (
@@ -238,154 +240,169 @@ const AddOffice = () => {
             {error}
           </div>
         )}
-
         {showFormPopup && (
           <div className="modal show" style={{ display: "block" }}>
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">{editIndex !== null ? "Edit Office" : "Add Office"}</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowFormPopup(false)}></button>
+                  <h5 className="modal-title">
+                    {editIndex !== null ? "Edit Office" : "Add Office"}
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setShowFormPopup(false)}
+                  ></button>
                 </div>
                 <div className="modal-body">
                   <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="office_name"
-                        name="office_name"
-                        placeholder="Office Name"
-                        value={formData.office_name}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
+                    <div className="row mb-3">
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="office_name"
+                          name="office_name"
+                          placeholder="Office Name"
+                          value={formData.office_name}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="office_address"
+                          name="office_address"
+                          placeholder="Office Address"
+                          value={formData.office_address}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="office_address"
-                        name="office_address"
-                        placeholder="Office Address"
-                        value={formData.office_address}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
+                    <div className="row mb-3">
+                      <div className="col-md-6">
+                        <input
+                          type="email"
+                          id="contact_email"
+                          name="contact_email"
+                          placeholder="Contact Email"
+                          value={formData.contact_email}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="contact_phone_number"
+                          name="contact_phone_number"
+                          placeholder="Contact Phone Number"
+                          value={formData.contact_phone_number}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <input
-                        type="email"
-                        id="contact_email"
-                        name="contact_email"
-                        placeholder="Contact Email"
-                        value={formData.contact_email}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
+                    <div className="row mb-3">
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="postal_address"
+                          name="postal_address"
+                          placeholder="Postal Address"
+                          value={formData.postal_address}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="office_manager_name"
+                          name="office_manager_name"
+                          placeholder="Office Manager Name"
+                          value={formData.office_manager_name}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="contact_phone_number"
-                        name="contact_phone_number"
-                        placeholder="Contact Phone Number"
-                        value={formData.contact_phone_number}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
+                    <div className="row mb-3">
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="username"
+                          name="username"
+                          placeholder="Username"
+                          value={formData.username}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          placeholder="Password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
                     </div>
-                    <div className="mb-3">
+                    <div className="row mb-3">
+                    <div className="col-md-6">
                       <input
-                        type="text"
-                        id="postal_address"
-                        name="postal_address"
-                        placeholder="Postal Address"
-                        value={formData.postal_address}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="office_manager_name"
-                        name="office_manager_name"
-                        placeholder="Office Manager Name"
-                        value={formData.office_manager_name}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        placeholder="Username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <textarea
-                        id="office_description"
                         name="office_description"
                         placeholder="Office Description"
                         value={formData.office_description}
                         onChange={handleChange}
                         className="form-control"
                       />
-                    </div>
-                    <div className="mb-3">
+                     </div>
+                     <div className="col-md-6">
                       <input
-                        type="text"
-                        id="office_hours"
-                        name="office_hours"
-                        placeholder="Office Hours"
-                        value={formData.office_hours}
-                        onChange={handleChange}
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="region"
-                        name="region"
-                        placeholder="Region"
-                        value={formData.region}
-                        onChange={handleChange}
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <textarea
-                        id="notes"
                         name="notes"
                         placeholder="Notes"
                         value={formData.notes}
                         onChange={handleChange}
                         className="form-control"
                       />
+                      </div>
+                    </div>
+                    <div className="row mb-3">
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="office_hours"
+                          name="office_hours"
+                          placeholder="Office Hours"
+                          value={formData.office_hours}
+                          onChange={handleChange}
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="region"
+                          name="region"
+                          placeholder="Region"
+                          value={formData.region}
+                          onChange={handleChange}
+                          className="form-control"
+                        />
+                      </div>
                     </div>
                     <div className="form-check mb-3">
                       <input
@@ -400,16 +417,9 @@ const AddOffice = () => {
                         Active
                       </label>
                     </div>
-                    <div className="modal-footer">
-                      <button type="submit" className="btn btn-primary">
-                        {editIndex !== null ? "Update Office" : "Add Office"}
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => setShowFormPopup(false)}
-                      >
-                        Cancel
+                    <div className="text-end">
+                      <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#3B8682', borderColor: '#3B8682', marginRight: '70px' }}>
+                        {editIndex !== null ? "Update" : "Submit"}
                       </button>
                     </div>
                   </form>
@@ -422,7 +432,7 @@ const AddOffice = () => {
         {showDeleteModal && (
           <div className="modal show" style={{ display: "block" }}>
             <div className="modal-dialog">
-              <div className="modal-content">
+              <div className="modal-content" style={{ height: "300px", width: "500px", marginLeft: "50px" }}>
                 <div className="modal-header">
                   <h5 className="modal-title">Confirm Deletion</h5>
                   <button type="button" className="btn-close" onClick={() => setShowDeleteModal(false)}></button>
@@ -431,18 +441,10 @@ const AddOffice = () => {
                   <p>Are you sure you want to delete this office?</p>
                 </div>
                 <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={handleDelete}
-                  >
+                  <button type="button" className="btn btn-danger" onClick={handleDelete}>
                     Yes
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setShowDeleteModal(false)}
-                  >
+                  <button type="button" className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>
                     No
                   </button>
                 </div>

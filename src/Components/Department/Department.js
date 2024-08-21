@@ -216,13 +216,13 @@ const Department = () => {
         <div className="d-flex justify-content-between mb-3">
           <input
             type="text"
-            placeholder="Search departments..."
+            placeholder="Search department"
             value={searchTerm}
             onChange={handleSearch}
-            className="form-control"
+            className="form-control search-input"
           />
           <button className="btn add1" onClick={openForm}>
-            <i className="fas fa-plus"></i> Add Department
+            <i className="fas fa-plus"></i> Add
           </button>
         </div>
 
@@ -243,65 +243,70 @@ const Department = () => {
         {showFormPopup && (
           <div className="modal show" style={{ display: 'block' }}>
             <div className="modal-dialog">
-              <div className="modal-content">
+              <div className="modal-content c7">
                 <div className="modal-header">
                   <h5 className="modal-title">{editIndex !== null ? 'Edit Department' : 'Add Department'}</h5>
                   <button type="button" className="btn-close" onClick={() => setShowFormPopup(false)}></button>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body c8">
                   <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="department_name"
-                        name="department_name"
-                        placeholder="Department Name"
-                        value={formData.department_name}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
+                    <div className=" row mb-3">
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="department_name"
+                          name="department_name"
+                          placeholder="Department Name"
+                          value={formData.department_name}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="department_description"
+                          name="department_description"
+                          placeholder="Department Description"
+                          value={formData.department_description}
+                          onChange={handleChange}
+                          required
+                          className="form-control"
+                        />
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="department_description"
-                        name="department_description"
-                        placeholder="Department Description"
-                        value={formData.department_description}
-                        onChange={handleChange}
-                        required
-                        className="form-control"
-                      />
+                    <div className=" row mb-3">
+                      <div className="col-md-6">
+                        <input
+                          type="text"
+                          id="department_head"
+                          name="department_head"
+                          placeholder="Department Head"
+                          value={formData.department_head}
+                          onChange={handleChange}
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <select
+                          id="office"
+                          name="office"
+                          value={formData.office}
+                          onChange={handleChange}
+                          className="form-select form-control"
+                        >
+                          <option value="">Select Office</option>
+                          {offices.map((office) => (
+                            <option key={office.id} value={office.id}>
+                              {office.office_name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-                    <div className="mb-3">
-                      <input
-                        type="text"
-                        id="department_head"
-                        name="department_head"
-                        placeholder="Department Head"
-                        value={formData.department_head}
-                        onChange={handleChange}
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <select
-                        id="office"
-                        name="office"
-                        value={formData.office}
-                        onChange={handleChange}
-                        className="form-select"
-                      >
-                        <option value="">Select Office</option>
-                        {offices.map((office) => (
-                          <option key={office.id} value={office.id}>
-                            {office.office_name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="mb-3">
+                    <div className="row mb-3">
+                    <div className="col-md-6">
                       <input
                         type="email"
                         id="contact_email"
@@ -312,7 +317,7 @@ const Department = () => {
                         className="form-control"
                       />
                     </div>
-                    <div className="mb-3">
+                    <div className="col-md-6">
                       <input
                         type="text"
                         id="contact_phone_number"
@@ -322,6 +327,7 @@ const Department = () => {
                         onChange={handleChange}
                         className="form-control"
                       />
+                      </div>
                     </div>
                     <div className="mb-3 form-check">
                       <input
@@ -334,9 +340,10 @@ const Department = () => {
                       />
                       <label htmlFor="status" className="form-check-label">Active</label>
                     </div>
-                    <div className="modal-footer">
-                      <button type="submit" className="btn btn-primary">Save</button>
-                      <button type="button" className="btn btn-secondary" onClick={() => setShowFormPopup(false)}>Close</button>
+                    <div className="text-end">
+                      <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#3B8682', borderColor: '#3B8682', marginRight: '70px' }}>
+                        {editIndex !== null ? "Update" : "Submit"}
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -348,7 +355,7 @@ const Department = () => {
         {showDeleteConfirm && (
           <div className="modal show" style={{ display: 'block' }}>
             <div className="modal-dialog">
-              <div className="modal-content">
+              <div className="modal-content" style={{ height: "300px", width: "500px", marginLeft: "50px" }}>
                 <div className="modal-header">
                   <h5 className="modal-title">Confirm Delete</h5>
                   <button type="button" className="btn-close" onClick={cancelDelete}></button>

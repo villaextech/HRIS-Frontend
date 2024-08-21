@@ -176,17 +176,19 @@ const Role = () => {
   return (
     <div className="main">
       <div className="container mt-4">
-        <div className="d-flex justify-content-between mb-3">
-          <input
-            type="text"
-            placeholder="Search roles..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="form-control"
-          />
-          <button className="btn add1" onClick={openForm}>
-            <i className="fas fa-plus"></i> Add Role
-          </button>
+        <div className="d-flex flex-column">
+          <div className="d-flex justify-content-between mb-3">
+            <input
+              type="text"
+              placeholder="Search role"
+              value={searchTerm}
+              onChange={handleSearch}
+              className="form-control search-input"
+            />
+            <button className="btn add1" onClick={openForm}>
+              <i className="fas fa-plus"></i> Add
+            </button>
+          </div>
         </div>
 
         {loading && (
@@ -206,12 +208,12 @@ const Role = () => {
         {showFormPopup && (
           <div className="modal show" style={{ display: 'block' }}>
             <div className="modal-dialog">
-              <div className="modal-content">
+              <div className="modal-content c9">
                 <div className="modal-header">
                   <h5 className="modal-title">{editIndex !== null ? 'Edit Role' : 'Add Role'}</h5>
                   <button type="button" className="btn-close" onClick={() => setShowFormPopup(false)}></button>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body c10">
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                       <input
@@ -226,8 +228,8 @@ const Role = () => {
                       />
                     </div>
                     <div className="mb-3">
-                      <input
-                        type="text"
+                      <textarea
+                        type='ttext'
                         id="roleDescription"
                         name="roleDescription"
                         placeholder="Role Description"
@@ -237,9 +239,10 @@ const Role = () => {
                         className="form-control"
                       />
                     </div>
-                    <div className="modal-footer">
-                      <button type="submit" className="btn btn-primary">Save</button>
-                      <button type="button" className="btn btn-secondary" onClick={() => setShowFormPopup(false)}>Close</button>
+                    <div className="text-end">
+                      <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#3B8682', borderColor: '#3B8682', marginRight: '70px' }}>
+                        {editIndex !== null ? "Update" : "Submit"}
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -249,19 +252,23 @@ const Role = () => {
         )}
 
         {showDeleteConfirm && (
-          <div className="modal show" style={{ display: 'block' }}>
+          <div className="modal show" style={{ display: "block" }}>
             <div className="modal-dialog">
-              <div className="modal-content">
+              <div className="modal-content" style={{ height: "300px", width: "500px", marginLeft: "50px" }}>
                 <div className="modal-header">
-                  <h5 className="modal-title">Confirm Delete</h5>
-                  <button type="button" className="btn-close" onClick={cancelDelete}></button>
+                  <h5 className="modal-title">Confirm Deletion</h5>
+                  <button type="button" className="btn-close" onClick={() => cancelDelete(false)}></button>
                 </div>
                 <div className="modal-body">
-                  <p>Are you sure you want to delete this role?</p>
+                  <p>Are you sure you want to delete this office?</p>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-danger" onClick={confirmDelete}>Yes</button>
-                  <button type="button" className="btn btn-secondary" onClick={cancelDelete}>No</button>
+                  <button type="button" className="btn btn-danger" onClick={confirmDelete}>
+                    Yes
+                  </button>
+                  <button type="button" className="btn btn-secondary" onClick={() => cancelDelete(false)}>
+                    No
+                  </button>
                 </div>
               </div>
             </div>
@@ -271,7 +278,7 @@ const Role = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>NO.</th> 
+              <th>NO.</th>
               <th>Role Name</th>
               <th>Description</th>
               <th>Actions</th>

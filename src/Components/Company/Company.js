@@ -273,12 +273,12 @@ const Company = () => {
         {showFormPopup && (
           <div className="modal show" style={{ display: "block" }}>
             <div className="modal-dialog">
-              <div className="modal-content">
+              <div className="modal-content c1">
                 <div className="modal-header">
                   <h5 className="modal-title">{editIndex !== null ? "Edit Company" : "Add Company"}</h5>
                   <button type="button" className="btn-close" onClick={() => setShowFormPopup(false)}></button>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body c2">
                   <form onSubmit={handleSubmit}>
                     <div className="row mb-3">
                       <div className="col-md-6">

@@ -3,8 +3,8 @@ import Sidebar from './Components/Sidebar/Sidebar';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Company from './Components/Company/Company';
 import Office from './Components/Office/Addoffice';
-import Designation from './Components/Department/Department';
-import Department from './Components/Desiganation/Desiganation';
+import Designation from './Components/Desiganation/Desiganation';
+import Department from './Components/Department/Department';
 import Role from './Components/Role/Role';
 import Login from './Components/Login/Login';
 

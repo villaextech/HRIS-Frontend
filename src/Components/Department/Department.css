@@ -7,6 +7,14 @@ body {
   align-items: center;
   margin-top: 20px;
 }
+.c7 {
+  width: 700px;
+  height: 330px;
+}
+.c8 {
+  width: 700px;
+  margin-bottom: 90px;
+}
 
 .pagination-button {
   background-color:  #3B8682; /* Primary blue color */
