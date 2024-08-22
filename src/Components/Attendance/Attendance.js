@@ -3,7 +3,7 @@ import React from 'react'
 const Attendance = () => {
   return (
     <div>
-      <h1>hey</h1>
+      <h1 style={{ textAlign:"center", alignItems:"center"}}>hey</h1>
     </div>
   )
 }

@@ -6,7 +6,7 @@ html {
   font-family: 'Nunito', sans-serif;
 }
 
-.background {
+.login-background {
   background: url('../img/bg.jpg');
   background-size: cover;
   background-position: center;
@@ -15,7 +15,7 @@ html {
   position: relative;
 }
 
-.overlay {
+.login-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -24,13 +24,13 @@ html {
   background-color: #FFFFFF;
 }
 
-.Logo {
+.login-logo {
   width: 311.7px;
   height: 95.72px;
   margin: 135px 73px 0 73px;
 }
 
-.p1 {
+.login-p1 {
   font-family: Nunito;
   font-size: 24.87px;
   font-weight: 400;
@@ -41,11 +41,11 @@ html {
   margin: 58px 70px 0 69px;
 }
 
-.p1 span {
+.login-p1 span {
   color: #DAB943;
 }
 
-.p2 {
+.login-p2 {
   font-family: Nunito;
   font-size: 49.74px;
   font-weight: 400;
@@ -56,12 +56,14 @@ html {
   margin-top: 29px;
   margin-left: 70px;
 }
-.password-container {
+
+.login-password-container {
   position: relative;
   display: flex;
   align-items: center;
 }
-.i1 {
+
+.login-i1 {
   width: 319.13px;
   height: 49.74px;
   border-radius: 8.29px;
@@ -70,14 +72,16 @@ html {
   box-sizing: border-box;
   padding-inline: 20px;
 }
-.password-toggle-icon {
+
+.login-password-toggle-icon {
   position: absolute;
   right: 90px;
   margin-top: 10px;
   cursor: pointer;
   color: #3B8682;
 }
-.options {
+
+.login-options {
   width: 350.96px;
   height: 29px;
   gap: 73.77px;
@@ -86,32 +90,29 @@ html {
   margin-left: 60px;
   display: flex;
 }
-.error-message {
+
+.login-error-message {
   color: red;
   margin: 8px 70px 0px 68px;
   font-size: 14px;
 }
 
-.remember-me {
+.login-remember-me {
   margin-top: 12px;
   color: #3B8682;
+  position: relative;
+  padding-left: 25px;
+  display: flex;
+  align-items: center;
 }
-.remember-me input[type="checkbox"] {
+
+.login-remember-me input[type="checkbox"] {
   position: absolute;
   opacity: 0;
   cursor: pointer;
 }
 
-.remember-me {
-  position: relative;
-  padding-left: 25px;
-  margin-top: 12px;
-  color: #3B8682;
-  display: flex;
-  align-items: center;
-}
-
-.remember-me label::before {
+.login-remember-me label::before {
   content: "";
   position: absolute;
   left: 0;
@@ -124,11 +125,11 @@ html {
   cursor: pointer;
 }
 
-.remember-me input[type="checkbox"]:checked + label::before {
+.login-remember-me input[type="checkbox"]:checked + label::before {
   background-color: #DAB943;
 }
 
-.remember-me input[type="checkbox"]:checked + label::after {
+.login-remember-me input[type="checkbox"]:checked + label::after {
   content: '';
   position: absolute;
   left: 4px;
@@ -140,7 +141,7 @@ html {
   transform: rotate(45deg);
 }
 
-.forgot-password {
+.login-forgot-password {
   position: relative;
   padding-left: 25px;
   margin-top: 12px;
@@ -148,23 +149,24 @@ html {
   display: flex;
   align-items: center;
 }
+
 .login-button {
   width: 330.13px;
   height: 53.05px;
   background: #DAB943;
   color: white;
   border-radius: 8.29px;
-  border: none; /* Remove the border */
+  border: none;
   margin: 17px 70px 0px 60px;
-  transition: background-color 0.3s ease; /* Add a smooth transition for the background color */
+  transition: background-color 0.3s ease;
 }
 
 .login-button:hover,
 .login-button:active {
-  background: #DAB943; /* Ensure the color stays the same on hover and active */
+  background: #DAB943;
 }
 
-.l1 {
+.login-l1 {
   font-family: Nunito;
   font-size: 16.58px;
   font-weight: 800;

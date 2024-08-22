@@ -5,6 +5,8 @@ import Company from './Components/Company/Company';
 import Office from './Components/Office/Addoffice';
 import Designation from './Components/Desiganation/Desiganation';
 import Department from './Components/Department/Department';
+import Employee from './Components/Employee/Employee';
+import Attendance from './Components/Attendance/Attendance';
 import Role from './Components/Role/Role';
 import Login from './Components/Login/Login';
 
@@ -18,7 +20,7 @@ const App = () => {
   return (
     <Router>
       <div className="app">
-        {isAuthenticated && <Sidebar />}
+        {isAuthenticated && <Sidebar setIsAuthenticated={setIsAuthenticated}/>}
         <div className="main-content">
           <Routes>
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
@@ -27,6 +29,8 @@ const App = () => {
             <Route path="/designation" element={isAuthenticated ? <Designation /> : <Navigate to="/login" />} />
             <Route path="/department" element={isAuthenticated ? <Department /> : <Navigate to="/login" />} />
             <Route path="/role" element={isAuthenticated ? <Role /> : <Navigate to="/login" />} />
+            <Route path="/employee" element={isAuthenticated ? <Employee /> : <Navigate to="/login" />} />
+            <Route path="/attendance" element={isAuthenticated ? <Attendance /> : <Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </div>

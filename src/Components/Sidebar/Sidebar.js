@@ -4,9 +4,10 @@ import './Sidebar.css'; // Import your Sidebar-specific CSS
 import 'boxicons/css/boxicons.min.css';
 import Logo from '../img/Logo.png';
 
-const Sidebar = () => {
+const Sidebar = ({setIsAuthenticated}) => {
   const handleLogout = () => {
     console.log('User logged out');
+    setIsAuthenticated(false);
   };
 
   return (
@@ -23,7 +24,7 @@ const Sidebar = () => {
           <div className="menu">
             <ul className="menu-links ps-0">
             <li className="nav-link has-dropdown ps-0">
-                <Link to="/hr">
+                <Link to="/employee">
                 <i className='bx bx-briefcase icon'></i>
                   <span className="text nav-text">HR</span>
                 </Link>
