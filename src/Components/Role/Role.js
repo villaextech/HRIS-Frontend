@@ -22,7 +22,7 @@ const Role = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/roles/');
+      const response = await fetch('http://54.86.62.130:8882/api/roles/');
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setRoles(data);
@@ -53,7 +53,7 @@ const Role = () => {
       let response;
       if (editIndex !== null) {
         const roleToEdit = roles[editIndex];
-        response = await fetch(`http://127.0.0.1:8000/api/roles/${roleToEdit.id}/`, {
+        response = await fetch(`http://54.86.62.130:8882/api/roles/${roleToEdit.id}/`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -67,7 +67,7 @@ const Role = () => {
         updatedRoles[editIndex] = updatedRole;
         setRoles(updatedRoles);
       } else {
-        response = await fetch('http://127.0.0.1:8000/api/roles/', {
+        response = await fetch('http://54.86.62.130:8882/api/roles/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -112,7 +112,7 @@ const Role = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/roles/${roleToDeleteItem.id}/`, {
+      const response = await fetch(`http://54.86.62.130:8882/api/roles/${roleToDeleteItem.id}/`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Network response was not ok');

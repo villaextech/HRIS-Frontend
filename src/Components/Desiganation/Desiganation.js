@@ -22,7 +22,7 @@ const Desiganation = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/designations/');
+      const response = await fetch('http://54.86.62.130:8882/api/designations/');
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setDesignations(data);
@@ -53,7 +53,7 @@ const Desiganation = () => {
       let response;
       if (editIndex !== null) {
         const designationToEdit = designations[editIndex];
-        response = await fetch(`http://127.0.0.1:8000/api/designations/${designationToEdit.id}/`, {
+        response = await fetch(`http://54.86.62.130:8882/api/designations/${designationToEdit.id}/`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
@@ -64,7 +64,7 @@ const Desiganation = () => {
         updatedDesignations[editIndex] = updatedDesignation;
         setDesignations(updatedDesignations);
       } else {
-        response = await fetch('http://127.0.0.1:8000/api/designations/', {
+        response = await fetch('http://54.86.62.130:8882/api/designations/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
@@ -106,7 +106,7 @@ const Desiganation = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/designations/${designationToDelete.id}/`, {
+      const response = await fetch(`http://54.86.62.130:8882/api/designations/${designationToDelete.id}/`, {
         method: 'DELETE'
       });
       if (!response.ok) throw new Error('Network response was not ok');

@@ -17,7 +17,7 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', {
+      const response = await axios.post('http://54.86.62.130:8882/api/login/', {
         email,
         password
       });

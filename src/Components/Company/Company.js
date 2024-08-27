@@ -32,7 +32,7 @@ const Company = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/tenants/");
+      const response = await fetch("http://54.86.62.130:8882/api/tenants/");
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setCompanies(data);
@@ -94,7 +94,7 @@ const Company = () => {
 
     try {
       if (editIndex !== null) {
-        const response = await axios.put(`http://127.0.0.1:8000/api/tenants/${companies[editIndex].id}/`, form, {
+        const response = await axios.put(`http://54.86.62.130:8882/api/tenants/${companies[editIndex].id}/`, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -106,7 +106,7 @@ const Company = () => {
           )
         );
       } else {
-        const response = await axios.post("http://127.0.0.1:8000/api/tenants/", form, {
+        const response = await axios.post("http://54.86.62.130:8882/api/tenants/", form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -171,7 +171,7 @@ const Company = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/tenants/${companyToDelete.id}/`, {
+      const response = await fetch(`http://54.86.62.130:8882/api/tenants/${companyToDelete.id}/`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Network response was not ok");
