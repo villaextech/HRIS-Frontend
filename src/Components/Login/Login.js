@@ -10,18 +10,11 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [role, setRole] = useState('Tenant');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
-
-  const roleMap = {
-    Admin: 1,
-    Tenant: 2,
-    Employee: 3,
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,13 +29,13 @@ const Login = ({ onLogin }) => {
           full_name: fullName,
           email,
           password,
-          role_id: roleMap[role],
+          role_id:"2"
         };
 
     try {
       const response = await axios.post(url, data);
 
-      if (response.status === 200 || response.status===201) {
+      if (response.status === 200 || response.status === 201) {
         console.log(`${isLogin ? 'Login' : 'Signup'} successful`);
         if (isLogin) {
           onLogin();
@@ -85,15 +78,6 @@ const Login = ({ onLogin }) => {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
-                <select
-                  className="login-i1"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                >
-                  <option value="Admin">Admin</option>
-                  <option value="Tenant">Tenant</option>
-                  <option value="Employee">Employee</option>
-                </select>
               </>
             )}
             <input
