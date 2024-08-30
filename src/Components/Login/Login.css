@@ -174,3 +174,13 @@ html {
   letter-spacing: -0.2735438048839569px;
   text-align: left;
 }
+.Signup-button {
+  width: 330.13px;
+  height: 53.05px;
+  background: #DAB943;
+  color: white;
+  border-radius: 8.29px;
+  border: none;
+  margin: 17px 70px 0px 60px;
+  transition: background-color 0.3s ease;
+}

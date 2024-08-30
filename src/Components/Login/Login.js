@@ -9,27 +9,60 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [role, setRole] = useState('Tenant');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+
+  const roleMap = {
+    Admin: 1,
+    Tenant: 2,
+    Employee: 3,
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://54.86.62.130:8882/api/login/', {
-        email,
-        password
-      });
 
-      if (response.status === 200) {
-        console.log('Login successful');
-        onLogin();
-        navigate('/company');
+    const url = isLogin
+      ? 'http://54.86.62.130:8882/api/login/'
+      : 'http://54.86.62.130:8882/api/signup/';
+
+    const data = isLogin
+      ? { email, password }
+      : {
+          full_name: fullName,
+          email,
+          password,
+          role_id: roleMap[role],
+        };
+
+    try {
+      const response = await axios.post(url, data);
+
+      if (response.status === 200 || response.status===201) {
+        console.log(`${isLogin ? 'Login' : 'Signup'} successful`);
+        if (isLogin) {
+          onLogin();
+          navigate('/company');
+        } else {
+          console.log('Signup successful. Redirecting to login...');
+          setIsLogin(true);
+          navigate('/login');
+        }
+      } else {
+        setErrorMessage('Unexpected response from the server.');
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      setErrorMessage('Invalid email or password. Please try again.');
+      console.error(`Error during ${isLogin ? 'login' : 'signup'}:`, error);
+      if (error.response && error.response.data) {
+        console.error('Server Response:', error.response.data);
+        setErrorMessage(error.response.data.message || 'An error occurred.');
+      } else {
+        setErrorMessage('Something went wrong. Please try again.');
+      }
     }
   };
 
@@ -38,9 +71,31 @@ const Login = ({ onLogin }) => {
       <div className="login-overlay">
         <div className="login-content">
           <img src={Logo} alt="Background" className="login-logo" />
-          <h2 className='login-p1'>Welcome to <span>HR JSI</span></h2>
-          <h2 className='login-p2'>Login</h2>
+          <h2 className="login-p1">
+            Welcome to <span>HR JSI</span>
+          </h2>
+          <h2 className="login-p2">{isLogin ? 'Login' : 'Signup'}</h2>
           <form onSubmit={handleSubmit}>
+            {!isLogin && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  className="login-i1"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+                <select
+                  className="login-i1"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                >
+                  <option value="Admin">Admin</option>
+                  <option value="Tenant">Tenant</option>
+                  <option value="Employee">Employee</option>
+                </select>
+              </>
+            )}
             <input
               type="email"
               placeholder="Email"
@@ -50,7 +105,7 @@ const Login = ({ onLogin }) => {
             />
             <div className="login-password-container">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
                 className="login-i1"
                 value={password}
@@ -63,7 +118,9 @@ const Login = ({ onLogin }) => {
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
               </span>
             </div>
-            {errorMessage && <div className="login-error-message">{errorMessage}</div>}
+            {errorMessage && (
+              <div className="login-error-message">{errorMessage}</div>
+            )}
             <div className="login-options">
               <div className="login-remember-me">
                 <input
@@ -74,12 +131,19 @@ const Login = ({ onLogin }) => {
                 />
                 <label htmlFor="rememberMe">Remember Me</label>
               </div>
-              <span className="login-forgot-password">
-                Forgot Password?
-              </span>
+              <span className="login-forgot-password">Forgot Password?</span>
             </div>
             <button type="submit" className="login-button">
-              <span className='login-l1'>Login</span>
+              <span className="login-l1">{isLogin ? 'Login' : 'Signup'}</span>
+            </button>
+            <button
+              type="button"
+              className="login-button"
+              onClick={() => setIsLogin(!isLogin)}
+            >
+              <span className="login-l1">
+                {isLogin ? 'Switch to Signup' : 'Switch to Login'}
+              </span>
             </button>
           </form>
         </div>
