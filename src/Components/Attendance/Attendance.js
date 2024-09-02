@@ -64,16 +64,16 @@ const Attendance = () => {
   return (
     <div className="main">
       <div className="container mt-4">
-        <div className="d-flex justify-content-between mb-3 a1">
-          <h4>Attendance</h4> 
-          <input
-            type="text"
-            placeholder="Search by biometric ID"
-            value={searchTerm}
-            onChange={handleSearch}
-            className="form-control search-input1"
-          />
-        </div>
+      <div className="d-flex justify-content-between align-items-center mb-3 ">
+            <span className="T1">Attendance</span>
+              <input
+                type="text"
+                placeholder="Search Attendance"
+                value={searchTerm}
+                onChange={handleSearch}
+                className="form-control search-input me-2 "
+              />
+            </div>
 
         {loading && (
           <div className="d-flex justify-content-center">

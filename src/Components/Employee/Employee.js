@@ -296,26 +296,34 @@ const Employee = () => {
     <div className="main">
       <div className="container mt-4">
         <div className="d-flex flex-column">
-          <div className="d-flex justify-content-between mb-3 ">
-            <div>
-              <div className="d-flex justify-content-between mb-3">
-                <input
-                  type="text"
-                  placeholder="Search employees"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                  className="form-control search-input"
-                />
-                <button className="btn add1" onClick={openForm}>
-                  <i className="fas fa-plus"></i> Add
-                </button>
+        <div className="d-flex justify-content-between align-items-center mb-3 ">
+            <span className="T1">Employee</span>
+            <div className='d-flex align-items-center'>
+              <input
+                type="text"
+                placeholder="Search Employee"
+                value={searchTerm}
+                onChange={handleSearch}
+                className="form-control search-input me-2 "
+              />
+              <button className="btn add1 me-8" onClick={openForm}>
+                Add
+              </button>
               </div>
             </div>
 
+          {loading && (
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
           </div>
-
-          {loading && <div className="spinner-border text-primary" role="status"><span className="sr-only">Loading...</span></div>}
-          {error && <div className="alert alert-danger">{error}</div>}
+        )} 
+         {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
 
           {paginatedEmployees.length > 0 && (
             <table className="table">
