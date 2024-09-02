@@ -281,7 +281,7 @@ const Role = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>NO.</th>
+              <th>No</th>
               <th>Role Name</th>
               <th>Description</th>
               <th>Actions</th>
