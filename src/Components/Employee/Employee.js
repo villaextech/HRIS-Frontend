@@ -60,7 +60,7 @@ const Employee = () => {
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
-
+  const [isFocused, setIsFocused] = useState(false);
   const itemsPerPage = 12;
 
   const fetchEmployees = useCallback(async () => {
@@ -296,7 +296,7 @@ const Employee = () => {
     <div className="main">
       <div className="container mt-4">
         <div className="d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-center mb-3 ">
+          <div className="d-flex justify-content-between align-items-center mb-3 ">
             <span className="T1">Employee</span>
             <div className='d-flex align-items-center'>
               <input
@@ -309,21 +309,21 @@ const Employee = () => {
               <button className="btn add1 me-8" onClick={openForm}>
                 Add
               </button>
-              </div>
             </div>
+          </div>
 
           {loading && (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
+            <div className="d-flex justify-content-center">
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
-        )} 
-         {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
+          )}
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
 
           {paginatedEmployees.length > 0 && (
             <table className="table">
@@ -431,14 +431,16 @@ const Employee = () => {
                   <div className="row mb-3">
                     <div className="col-md-6">
                       <input
-                        type="date"
+                        type={isFocused ? 'date' : 'text'}
                         id="dateOfBirth"
                         name="dateOfBirth"
                         placeholder="Date of Birth"
                         value={formData.dateOfBirth}
                         onChange={handleChange}
                         required
-                        className="form-control"
+                        className="form-control custom-date-input"
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
                       />
                     </div>
                     <div className="col-md-6">
@@ -542,14 +544,16 @@ const Employee = () => {
                   <div className="row mb-3">
                     <div className="col-md-6">
                       <input
-                        type="date"
+                        type={isFocused ? 'date' : 'text'}
                         id="employeeStartDate"
                         name="employeeStartDate"
                         placeholder="Employee Start Date"
                         value={formData.employeeStartDate}
                         onChange={handleChange}
                         required
-                        className="form-control"
+                        className="form-control custom-date-input"
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
                       />
                     </div>
                     <div className="col-md-6">
@@ -689,14 +693,16 @@ const Employee = () => {
                     </div>
                     <div className="col-md-6">
                       <input
-                        type="date"
+                        type={isFocused ? 'date' : 'text'}
                         id="probationPeriodEndDate"
                         name="probationPeriodEndDate"
                         placeholder="Probation Period End Date"
                         value={formData.probationPeriodEndDate}
                         onChange={handleChange}
                         required
-                        className="form-control"
+                        className="form-control custom-date-input"
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
                       />
                     </div>
                   </div>
@@ -704,14 +710,16 @@ const Employee = () => {
                   <div className="row mb-3">
                     <div className="col-md-6">
                       <input
-                        type="date"
+                        type={isFocused ? 'date' : 'text'}
                         id="contractEndDate"
                         name="contractEndDate"
                         placeholder="Contract End Date"
                         value={formData.contractEndDate}
                         onChange={handleChange}
                         required
-                        className="form-control"
+                        className="form-control custom-date-input"
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
                       />
                     </div>
                     <div className="col-md-6">

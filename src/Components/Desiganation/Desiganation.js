@@ -4,8 +4,8 @@ import './Desiganation.css'; // Ensure this CSS file is styled according to your
 
 const Desiganation = () => {
   const [formData, setFormData] = useState({
-    designationTitle: '',
-    designationDescription: ''
+    title: '',
+    description: ''
   });
   const [designations, setDesignations] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
@@ -74,8 +74,8 @@ const Desiganation = () => {
         setDesignations(prev => [...prev, newDesignation]);
       }
       setFormData({
-        designationTitle: '',
-        designationDescription: ''
+        title: '',
+        description: ''
       });
       setEditIndex(null);
       setShowFormPopup(false);
@@ -89,8 +89,8 @@ const Desiganation = () => {
   const handleEdit = (index) => {
     const designationToEdit = designations[index];
     setFormData({
-      designationTitle: designationToEdit.title,
-      designationDescription: designationToEdit.description
+      title: designationToEdit.title,
+      description: designationToEdit.description
     });
     setEditIndex(index);
     setShowFormPopup(true);
@@ -162,8 +162,8 @@ const Desiganation = () => {
 
   const openForm = () => {
     setFormData({
-      designationTitle: '',
-      designationDescription: ''
+      title: '',
+      description: ''
     });
     setEditIndex(null);
     setShowFormPopup(true);
@@ -173,7 +173,7 @@ const Desiganation = () => {
     <div className="main">
       <div className="container mt-4">
         <div className="d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-center mb-3 ">
+          <div className="d-flex justify-content-between align-items-center mb-3">
             <span className="T1">Desiganation</span>
             <div className='d-flex align-items-center'>
               <input
@@ -181,13 +181,13 @@ const Desiganation = () => {
                 placeholder="Search Desiganation"
                 value={searchTerm}
                 onChange={handleSearch}
-                className="form-control search-input me-2 "
+                className="form-control search-input me-2"
               />
               <button className="btn add1 me-8" onClick={openForm}>
                 Add
               </button>
-              </div>
             </div>
+          </div>
         </div>
 
         {loading && (
@@ -216,11 +216,10 @@ const Desiganation = () => {
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                       <textarea
-                        type="text"
-                        id="designationTitle"
-                        name="designationTitle"
+                        id="title"
+                        name="title"
                         placeholder="Designation Title"
-                        value={formData.designationTitle}
+                        value={formData.title}
                         onChange={handleChange}
                         required
                         className="form-control f2"
@@ -228,11 +227,10 @@ const Desiganation = () => {
                     </div>
                     <div className="mb-3">
                       <textarea
-                        type="text"
-                        id="designationDescription"
-                        name="designationDescription"
+                        id="description"
+                        name="description"
                         placeholder="Designation Description"
-                        value={formData.designationDescription}
+                        value={formData.description}
                         onChange={handleChange}
                         required
                         className="form-control f2"
@@ -256,16 +254,16 @@ const Desiganation = () => {
               <div className="modal-content" style={{ height: "300px", width: "500px", marginLeft: "50px" }}>
                 <div className="modal-header">
                   <h5 className="modal-title">Confirm Deletion</h5>
-                  <button type="button" className="btn-close" onClick={() => cancelDelete(false)}></button>
+                  <button type="button" className="btn-close" onClick={cancelDelete}></button>
                 </div>
                 <div className="modal-body">
-                  <p>Are you sure you want to delete this office?</p>
+                  <p>Are you sure you want to delete this designation?</p>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-danger" onClick={confirmDelete}>
                     Yes
                   </button>
-                  <button type="button" className="btn btn-secondary" onClick={() => cancelDelete(false)}>
+                  <button type="button" className="btn btn-secondary" onClick={cancelDelete}>
                     No
                   </button>
                 </div>
@@ -277,19 +275,17 @@ const Desiganation = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>No</th>
-              <th>Designation</th>
+              <th>Title</th>
               <th>Description</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {paginatedDesignations.map((designation, index) => (
-              <tr key={designation.id}>
-                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td> {/* Numbering logic */}
+              <tr key={index}>
                 <td>{designation.title}</td>
                 <td>{designation.description}</td>
-                <td>
+                 <td>
                   <button
                     className="btn btn-icon me-2"
                     onClick={() => handleEdit(index)}

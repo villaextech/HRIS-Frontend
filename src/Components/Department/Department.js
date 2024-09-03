@@ -28,7 +28,7 @@ const Department = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://54.86.62.130:8882/api/departments/');
+      const response = await fetch('http://54.86.62.130:8882/api/offices/');
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setOffices(data);

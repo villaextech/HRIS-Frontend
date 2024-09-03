@@ -52,10 +52,12 @@ const Attendance = () => {
     return items.slice(startIndex, startIndex + itemsPerPage);
   };
 
+  // Update the filtering logic to include both biometric ID and full name
   const filteredEmployees = employees.filter(employee => {
-    const biometricId = employee.biometric_id ? employee.biometric_id.toString() : '';
-    const search = searchTerm.toLowerCase() || '';
-    return biometricId.includes(search);
+    const biometricId = employee.biometric_id ? employee.biometric_id.toString().toLowerCase() : '';
+    const fullName = employee.employee.full_name.toLowerCase();
+    const search = searchTerm.toLowerCase();
+    return biometricId.includes(search) || fullName.includes(search);
   });
 
   const paginatedEmployees = paginate(filteredEmployees, currentPage, itemsPerPage);
@@ -64,16 +66,16 @@ const Attendance = () => {
   return (
     <div className="main">
       <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-3 ">
-            <span className="T1">Attendance</span>
-              <input
-                type="text"
-                placeholder="Search Attendance"
-                value={searchTerm}
-                onChange={handleSearch}
-                className="form-control search-input me-2 "
-              />
-            </div>
+        <div className="d-flex justify-content-between align-items-center mb-3 ">
+          <span className="T1">Attendance</span>
+          <input
+            type="text"
+            placeholder="Search attendance"
+            value={searchTerm}
+            onChange={handleSearch}
+            className="form-control search-input me-2"
+          />
+        </div>
 
         {loading && (
           <div className="d-flex justify-content-center">
@@ -93,6 +95,8 @@ const Attendance = () => {
           <thead className="align-middle">
             <tr>
               <th>No</th>
+              <th>Employee ID</th>
+              <th>Full Name</th>
               <th>Date</th>
               <th>Check-In Time</th>
               <th>Check-Out Time</th>
@@ -107,9 +111,11 @@ const Attendance = () => {
             {paginatedEmployees.map((employee, index) => (
               <tr key={employee.id}>
                 <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                <td>{employee.employee.employee_id}</td>
+                <td>{employee.employee.full_name}</td>
                 <td>{employee.date}</td>
-                <td>{employee.check_in_time}</td>
-                <td>{employee.check_out_time}</td>
+                <td>{new Date(employee.check_in_time).toLocaleTimeString()}</td>
+                <td>{new Date(employee.check_out_time).toLocaleTimeString()}</td>
                 <td>{employee.status}</td>
                 <td>{employee.working_hours}</td>
                 <td>{employee.is_late ? 'Yes' : 'No'}</td>
