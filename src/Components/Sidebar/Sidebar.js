@@ -4,7 +4,7 @@ import './Sidebar.css'; // Import your Sidebar-specific CSS
 import 'boxicons/css/boxicons.min.css';
 import Logo from '../img/Logo.png';
 
-const Sidebar = ({setIsAuthenticated}) => {
+const Sidebar = ({ setIsAuthenticated }) => {
   const handleLogout = () => {
     console.log('User logged out');
     setIsAuthenticated(false);
@@ -23,24 +23,38 @@ const Sidebar = ({setIsAuthenticated}) => {
         <div className="menu-bar">
           <div className="menu">
             <ul className="menu-links ps-0">
-            <li className="nav-link has-dropdown ps-0">
+              <li>
+                <Link to="/dashboard">
+                  <i className='bx bx-grid-alt icon'></i>
+                  <span className="text nav-text">Dashboard</span>
+                </Link>
+              </li>
+              <li className="nav-link has-dropdown ps-0">
                 <Link to="/employee">
-                <i className='bx bx-briefcase icon'></i>
+                  <i className='bx bx-briefcase icon'></i>
                   <span className="text nav-text">HR</span>
                 </Link>
                 <ul className="dropdown">
                   <li>
                     <Link to="/employee">
-                    <i className='bx bx-user icon'></i>
+                      <i className='bx bx-user icon'></i>
                       <span className="text nav-text">Employee</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/attendance">
-                    <i className='bx bx-calendar icon'></i>
-                      <span className="text nav-text">Attendance</span>
+                    <Link to="/biometric">
+                      <i className='bx bx-fingerprint icon'></i>
+                      <span className="text nav-text">Biometric</span>
                     </Link>
                   </li>
+                  <li>
+                    <Link to="/shift">
+                      <i className='bx bx-time-five icon'></i> 
+                      <span className="text nav-text">Shift</span> 
+                    </Link>
+                  </li>
+
+
                 </ul>
               </li>
               <li className="nav-link has-dropdown">
@@ -82,8 +96,8 @@ const Sidebar = ({setIsAuthenticated}) => {
                 </ul>
               </li>
               <li>
-              <Link to="*"onClick={handleLogout}>
-              <i className='bx bx-log-out icon' ></i>
+                <Link to="*" onClick={handleLogout}>
+                  <i className='bx bx-log-out icon' ></i>
                   <span className="text nav-text">Logout</span>
                 </Link>
               </li>
