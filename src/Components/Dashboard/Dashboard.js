@@ -90,7 +90,7 @@ const Dashboard = () => {
               className="btn add1"
               onClick={() => setShowAttendance((prev) => !prev)}
             >
-              {showAttendance ? "Hide Attendance" : "Show Attendance"}
+              {showAttendance ? "Hide Attendance" : "Get Attendance"}
             </button>
           </div>
         </div>
