@@ -8,26 +8,8 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [loading, setLoading] = useState(false);
-  const [isCheckInFocused, setIsCheckInFocused] = useState(false);
-  const [isCheckOutFocused, setIsCheckOutFocused] = useState(false);
   const [error, setError] = useState(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [showAttendance, setShowAttendance] = useState(false); // State to control showing attendance
-  const [showFormPopup, setShowFormPopup] = useState(false); // State to control manual attendance form popup
-
-  // State for handling form data
-  const [formData, setFormData] = useState({
-    employee_id: "",
-    full_name: "",
-    attendance_date: "",
-    check_in_time: "",
-    check_out_time: "",
-    status: "Present",
-    working_hours: "",
-    remarks: "",
-    is_late: false,
-    biometric_id: ""
-  });
+  const [showAttendance, setShowAttendance] = useState(false);
 
   const fetchEmployees = useCallback(async () => {
     setLoading(true);
@@ -83,25 +65,11 @@ const Dashboard = () => {
   const paginatedEmployees = paginate(filteredEmployees, currentPage, itemsPerPage);
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
 
-  const openManualAttendanceForm = () => {
-    setShowFormPopup(true);
-  };
-
-  // Handle form input changes
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Perform the form submission logic here
-    console.log(formData); // For testing purpose
-    setShowFormPopup(false); // Close form popup on submit
+  const formatTime = (dateStr, timeStr) => {
+    if (!dateStr || !timeStr) return '';
+    const fullDateStr = `${dateStr}T${timeStr}`; // Combine date and time
+    const date = new Date(fullDateStr);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
   };
 
   return (
@@ -118,9 +86,6 @@ const Dashboard = () => {
               className="form-control search-input me-2"
               disabled={!showAttendance} // Disable search when attendance is hidden
             />
-            <button className="btn add1 me-2" onClick={openManualAttendanceForm}>
-              Add Manual Attendance
-            </button>
             <button
               className="btn add1"
               onClick={() => setShowAttendance((prev) => !prev)}
@@ -169,8 +134,8 @@ const Dashboard = () => {
                     <td>{employee.employee.employee_id}</td>
                     <td>{employee.employee.full_name}</td>
                     <td>{employee.date}</td>
-                    <td>{new Date(employee.check_in_time).toLocaleTimeString()}</td>
-                    <td>{new Date(employee.check_out_time).toLocaleTimeString()}</td>
+                    <td>{formatTime(employee.date, employee.check_in_time)}</td>
+                    <td>{formatTime(employee.date, employee.check_out_time)}</td>
                     <td>{employee.status}</td>
                     <td>{employee.working_hours}</td>
                     <td>{employee.is_late ? 'Yes' : 'No'}</td>
@@ -208,183 +173,9 @@ const Dashboard = () => {
             </div>
           </>
         )}
-
-        {showFormPopup && (
-          <div className="modal show" style={{ display: "block" }}>
-            <div className="modal-dialog">
-              <div className="modal-content c1">
-                <div className="modal-header">
-                  <h5 className="modal-title">Add Attendance</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowFormPopup(false)}></button>
-                </div>
-                <div className="modal-body c2">
-                  <form onSubmit={handleSubmit}>
-                    {/* Row 1: Employee ID and Full Name */}
-                    <div className="row mb-3">
-                      <div className="col-md-6">
-                        <input
-                          type="text"
-                          id="employee_id"
-                          name="employee_id"
-                          placeholder="Employee ID"
-                          value={formData.employee_id}
-                          onChange={handleChange}
-                          required
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <input
-                          type="text"
-                          id="full_name"
-                          name="full_name"
-                          placeholder="Full Name"
-                          value={formData.full_name}
-                          onChange={handleChange}
-                          required
-                          className="form-control"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Row 2: Date and Check-in Time */}
-                    <div className="row mb-3">
-                      <div className="col-md-6">
-                        <input
-                          type={isFocused ? 'date' : 'text'}
-                          id="date"
-                          name="date"
-                          placeholder="Date"
-                          value={formData.dateOfBirth}
-                          onChange={handleChange}
-                          required
-                          className="form-control custom-date-input"
-                          onFocus={() => setIsFocused(true)}
-                          onBlur={() => setIsFocused(false)}
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <input
-                          type={isCheckInFocused ? 'time' : 'text'}
-                          id="check_in_time"
-                          name="check_in_time"
-                          placeholder="Check-In Time"
-                          value={formData.check_in_time}
-                          onChange={handleChange}
-                          required
-                          className="form-control custom-time-input"
-                          onFocus={() => setIsCheckInFocused(true)}
-                          onBlur={() => setIsCheckInFocused(false)}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Row 3: Check-out Time and Working Hours */}
-                    <div className="row mb-3">
-                      <div className="col-md-6">
-                        <input
-                          type={isCheckOutFocused ? 'time' : 'text'}
-                          id="check_out_time"
-                          name="check_out_time"
-                          placeholder="Check-Out Time"
-                          value={formData.check_out_time}
-                          onChange={handleChange}
-                          required
-                          className="form-control custom-time-input"
-                          onFocus={() => setIsCheckOutFocused(true)}
-                          onBlur={() => setIsCheckOutFocused(false)}
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <input
-                          type="number"
-                          id="working_hours"
-                          name="working_hours"
-                          placeholder="Working Hours"
-                          value={formData.working_hours}
-                          onChange={handleChange}
-                          required
-                          className="form-control"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Row 4: Status and Late */}
-                    <div className="row mb-3">
-                      <div className="col-md-6">
-                        <select
-                          id="status"
-                          name="status"
-                          value={formData.status}
-                          onChange={handleChange}
-                          className="form-control"
-                          required
-                        >
-                          <option value="Present">Present</option>
-                          <option value="Absent">Absent</option>
-                          <option value="On Leave">On Leave</option>
-                        </select>
-                      </div>
-                      <div className="col-md-6">
-                        <select
-                          id="is_late"
-                          name="is_late"
-                          value={formData.is_late ? 'Yes' : 'No'}
-                          onChange={handleChange}
-                          className="form-control"
-                          required
-                        >
-                          <option value="No">No</option>
-                          <option value="Yes">Yes</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Row 5: Remarks and Biometric ID */}
-                    <div className="row mb-3">
-                      <div className="col-md-6">
-                        <input
-                          type="text"
-                          id="remarks"
-                          name="remarks"
-                          placeholder="Remarks"
-                          value={formData.remarks}
-                          onChange={handleChange}
-                          className="form-control"
-                        />
-                      </div>
-                      <div className="col-md-6">
-                        <input
-                          type="text"
-                          id="biometric_id"
-                          name="biometric_id"
-                          placeholder="Biometric ID"
-                          value={formData.biometric_id}
-                          onChange={handleChange}
-                          required
-                          className="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div className="text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-primary"
-                        style={{ backgroundColor: '#3B8682', borderColor: '#3B8682', marginRight: '70px' }}
-                      >
-                        Submit
-                      </button>
-                    </div>
-
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-export default Dashboard
+export default Dashboard;

@@ -39,7 +39,7 @@ const Login = ({ onLogin }) => {
         console.log(`${isLogin ? 'Login' : 'Signup'} successful`);
         if (isLogin) {
           onLogin();
-          navigate('/dashboard');
+          navigate('/company');
         } else {
           console.log('Signup successful. Redirecting to login...');
           setIsLogin(true);
