@@ -28,7 +28,7 @@ const Department = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://54.86.62.130:8882/api/offices/');
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/offices/`);
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setOffices(data);
@@ -43,7 +43,7 @@ const Department = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://54.86.62.130:8882/api/departments/');
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/departments/`);
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setDepartments(data);
@@ -77,7 +77,7 @@ const Department = () => {
       let response;
       if (editIndex !== null) {
         const departmentToEdit = departments[editIndex];
-        response = await fetch(`http://54.86.62.130:8882/api/departments/${departmentToEdit.id}/`, {
+        response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/departments/${departmentToEdit.id}/`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(processedFormData),
@@ -88,7 +88,7 @@ const Department = () => {
         updatedDepartments[editIndex] = updatedDepartment;
         setDepartments(updatedDepartments);
       } else {
-        response = await fetch('http://54.86.62.130:8882/api/departments/', {
+        response = await fetch('{process.env.REACT_APP_BASE_URL}/api/departments/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(processedFormData),
@@ -142,7 +142,7 @@ const Department = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://54.86.62.130:8882/api/departments/${departmentToDelete.id}/`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/departments/${departmentToDelete.id}/`, {
         method: 'DELETE',
       });
       if (!response.ok) throw new Error('Network response was not ok');

@@ -67,7 +67,7 @@ const Employee = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://54.86.62.130:8882/api/employees/");
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/employees/`);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setEmployees(data);
@@ -107,7 +107,7 @@ const Employee = () => {
 
     try {
       if (editIndex !== null) {
-        await axios.put(`http://54.86.62.130:8882/api/employees/${employees[editIndex].id}/`, form, {
+        await axios.put(`${process.env.REACT_APP_BASE_URL}/api/employees/${employees[editIndex].id}/`, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -118,7 +118,7 @@ const Employee = () => {
           )
         );
       } else {
-        await axios.post("http://54.86.62.130:8882/api/employees/", form, {
+        await axios.post(`${process.env.REACT_APP_BASE_URL}/api/employees/`, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -199,7 +199,7 @@ const Employee = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://54.86.62.130:8882/api/employees/${employeeToDelete.id}/`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/employees/${employeeToDelete.id}/`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Network response was not ok");

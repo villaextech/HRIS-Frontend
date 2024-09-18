@@ -20,8 +20,8 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
 
     const url = isLogin
-      ? 'http://54.86.62.130:8882/api/login/'
-      : 'http://54.86.62.130:8882/api/signup/';
+      ? `${process.env.REACT_APP_BASE_URL}/api/login/`
+      : `${process.env.REACT_APP_BASE_URL}/api/signup/`;
 
     const data = isLogin
       ? { email, password }

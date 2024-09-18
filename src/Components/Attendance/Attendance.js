@@ -33,7 +33,7 @@ const Attendance = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://54.86.62.130:8882/api/attendance/");
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/attendance/`);
       setEmployees(response.data);
     } catch (error) {
       setError("Error fetching employees: " + error.message);

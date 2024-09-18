@@ -27,7 +27,7 @@ const Biometric = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://54.86.62.130:8882/api/biometric-machines/");
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/biometric-machines/`);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setBiometricMachines(data);
@@ -63,7 +63,7 @@ const Biometric = () => {
 
     try {
       if (editIndex !== null) {
-        const response = await axios.put(`http://54.86.62.130:8882/api/biometric-machines/${biometricMachines[editIndex].id}/`, newMachine);
+        const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/biometric-machines${biometricMachines[editIndex].id}/`, newMachine);
         console.log("Update response:", response.data);
         setBiometricMachines((prevMachines) =>
           prevMachines.map((machine, i) =>
@@ -71,7 +71,7 @@ const Biometric = () => {
           )
         );
       } else {
-        const response = await axios.post("http://54.86.62.130:8882/api/biometric-machines/", newMachine);
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/biometric-machines`, newMachine);
         setBiometricMachines([...biometricMachines, response.data]);
       }
     } catch (error) {
@@ -117,7 +117,7 @@ const Biometric = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://54.86.62.130:8882/api/biometric-machines/${machineToDelete.id}/`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/biometric-machines/${machineToDelete.id}/`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Network response was not ok");

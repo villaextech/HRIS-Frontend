@@ -32,7 +32,7 @@ const Company = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("http://54.86.62.130:8882/api/tenants/");
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/tenants/`);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setCompanies(data);
@@ -94,7 +94,7 @@ const Company = () => {
 
     try {
       if (editIndex !== null) {
-        const response = await axios.put(`http://54.86.62.130:8882/api/tenants/${companies[editIndex].id}/`, form, {
+        const response = await axios.put(`{process.env.REACT_APP_BASE_URL}/api/tenants/${companies[editIndex].id}/`, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -106,7 +106,7 @@ const Company = () => {
           )
         );
       } else {
-        const response = await axios.post("http://54.86.62.130:8882/api/tenants/", form, {
+        const response = await axios.post("{process.env.REACT_APP_BASE_URL}/api/tenants/", form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

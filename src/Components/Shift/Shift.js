@@ -28,7 +28,7 @@ const Shift = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch("http://54.86.62.130:8882/api/shifts/");
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/shifts/`);
             if (!response.ok) throw new Error("Network response was not ok");
             const data = await response.json();
             setShifts(data);
@@ -63,14 +63,14 @@ const Shift = () => {
 
         try {
             if (editIndex !== null) {
-                await axios.put(`http://54.86.62.130:8882/api/shifts/${shifts[editIndex].id}/`, newShift);
+                await axios.put(`${process.env.REACT_APP_BASE_URL}/api/shifts/${shifts[editIndex].id}/`, newShift);
                 setShifts((prevShifts) =>
                     prevShifts.map((shift, i) =>
                         i === editIndex ? { ...shift, ...newShift } : shift
                     )
                 );
             } else {
-                const response = await axios.post("http://54.86.62.130:8882/api/shifts/", newShift);
+                const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/shifts/`, newShift);
                 setShifts([...shifts, response.data]);
             }
         } catch (error) {
@@ -115,7 +115,7 @@ const Shift = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://54.86.62.130:8882/api/shifts/${shiftToDelete.id}/`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/shifts/${shiftToDelete.id}/`, {
                 method: "DELETE",
             });
             if (!response.ok) throw new Error("Network response was not ok");
