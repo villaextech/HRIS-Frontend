@@ -76,7 +76,7 @@ const Dashboard = () => {
     <div className="main">
       <div className="container mt-4">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <span className="T1">Dashboard</span>
+          <span className="T1">Hey Dashboard</span>
           <div className="d-flex align-items-center">
             <input
               type="text"
