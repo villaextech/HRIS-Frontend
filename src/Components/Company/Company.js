@@ -171,7 +171,7 @@ const Company = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://54.86.62.130:8882/api/tenants/${companyToDelete.id}/`, {
+      const response = await fetch(`{process.env.REACT_APP_BASE_URL}/api/tenants${companyToDelete.id}/`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Network response was not ok");
