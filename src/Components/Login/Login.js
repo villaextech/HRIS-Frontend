@@ -23,7 +23,7 @@ const Login = ({ onLogin }) => {
 
     const url = isLogin
       ? `${apiBaseUrl}/api/login/`
-      : `${proc}/api/signup/`;
+      : `${apiBaseUrl}/api/signup/`;
 
     const data = isLogin
       ? { email, password }
