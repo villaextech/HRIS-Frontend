@@ -19,9 +19,11 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const apiBaseUrl = process.env.REACT_APP_BASE_URL || "http://54.86.62.130:8882"
+
     const url = isLogin
-      ? `${process.env.REACT_APP_BASE_URL}/api/login/`
-      : `${process.env.REACT_APP_BASE_URL}/api/signup/`;
+      ? `${apiBaseUrl}/api/login/`
+      : `${proc}/api/signup/`;
 
     const data = isLogin
       ? { email, password }
