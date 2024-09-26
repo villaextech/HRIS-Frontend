@@ -94,7 +94,7 @@ const Company = () => {
 
     try {
       if (editIndex !== null) {
-        const response = await axios.put(`{process.env.REACT_APP_BASE_URL}/api/tenants/${companies[editIndex].id}/`, form, {
+        const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/api/tenants/${companies[editIndex].id}/`, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -171,7 +171,7 @@ const Company = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`{process.env.REACT_APP_BASE_URL}/api/tenants${companyToDelete.id}/`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/tenants/${companyToDelete.id}/`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Network response was not ok");
