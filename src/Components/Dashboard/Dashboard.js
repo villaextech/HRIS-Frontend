@@ -82,7 +82,6 @@ const Dashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      // Build query parameters based on filters
       const params = {};
 
       if (startDate) params.start_date = startDate.toISOString().split('T')[0];
@@ -92,7 +91,6 @@ const Dashboard = () => {
       if (selectedBiometricIds.length > 0) params.biometric_id = selectedBiometricIds;
       if (selectedEmployeeIds.length > 0) params.employee_id = selectedEmployeeIds;
 
-      // Serialize parameters
       const queryString = new URLSearchParams();
       Object.keys(params).forEach(key => {
         if (Array.isArray(params[key])) {
@@ -102,13 +100,9 @@ const Dashboard = () => {
         }
       });
 
-      console.log('Fetching employees with params:', queryString.toString());
-
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/attendance/filter/?${queryString.toString()}`);
-      console.log('API Response:', response.data);
       setEmployees(response.data);
     } catch (error) {
-      console.error('Fetch Employees Error:', error);
       setError("Error fetching employees: " + (error.response?.data?.message || error.message));
     } finally {
       setLoading(false);
@@ -123,9 +117,7 @@ const Dashboard = () => {
       }
       debounceTimeoutRef.current = setTimeout(() => {
         fetchEmployees();
-      }, 500); // 500ms delay
-
-      // Cleanup on unmount or when dependencies change
+      }, 500);
       return () => clearTimeout(debounceTimeoutRef.current);
     }
   }, [fetchEmployees, showAttendance, selectedEmployeeNames, selectedBiometricIds, selectedEmployeeIds, selectedStatuses, startDate, endDate]);
@@ -173,12 +165,31 @@ const Dashboard = () => {
     return items.slice(startIndex, startIndex + itemsPerPage);
   };
 
-  // Filter employees based on searchTerm
+  // Filter employees based on searchTerm and date range
   const filteredEmployees = employees.filter((employee) => {
     const biometricIdStr = employee.biometric_id ? employee.biometric_id.toString().toLowerCase() : '';
     const fullName = employee.employee.full_name.toLowerCase();
     const search = searchTerm.toLowerCase();
-    return biometricIdStr.includes(search) || fullName.includes(search);
+
+    // Date filtering logic
+    const employeeDate = new Date(employee.date);
+    let isWithinDateRange = false;
+
+    if (startDate && endDate) {
+      // Both start and end dates are selected
+      isWithinDateRange = employeeDate >= startDate && employeeDate <= endDate;
+    } else if (startDate) {
+      // Only start date is selected
+      isWithinDateRange = employeeDate.toDateString() === startDate.toDateString();
+    } else if (endDate) {
+      // Only end date is selected
+      isWithinDateRange = employeeDate.toDateString() === endDate.toDateString();
+    } else {
+      // No date selected
+      isWithinDateRange = true;
+    }
+
+    return (biometricIdStr.includes(search) || fullName.includes(search)) && isWithinDateRange;
   });
 
   const paginatedEmployees = paginate(filteredEmployees, currentPage, itemsPerPage);

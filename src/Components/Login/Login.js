@@ -19,9 +19,11 @@ const Login = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const apiBaseUrl = process.env.REACT_APP_BASE_URL || "http://54.86.62.130:8882"
+
     const url = isLogin
-      ? `${process.env.REACT_APP_BASE_URL}/api/login/`
-      : `${process.env.REACT_APP_BASE_URL}/api/signup/`;
+      ? `${apiBaseUrl}/api/login/`
+      : `${apiBaseUrl}/api/signup/`;
 
     const data = isLogin
       ? { email, password }
@@ -29,7 +31,7 @@ const Login = ({ onLogin }) => {
           full_name: fullName,
           email,
           password,
-          role_id:"2"
+          role_id: "1"
         };
 
     try {
@@ -38,8 +40,14 @@ const Login = ({ onLogin }) => {
       if (response.status === 200 || response.status === 201) {
         console.log(`${isLogin ? 'Login' : 'Signup'} successful`);
         if (isLogin) {
-          onLogin();
-          navigate('/company');
+          const { menues } = response.data;
+          if (menues && menues.length > 0) {
+            const allowedUrls = menues.map(menu => menu.url); // Extract allowed URLs
+            onLogin(allowedUrls); // Pass allowed URLs to the App component
+            navigate(allowedUrls[0]); // Redirect to the first allowed menu URL
+          } else {
+            setErrorMessage('No menu available for this user.');
+          }
         } else {
           console.log('Signup successful. Redirecting to login...');
           setIsLogin(true);
