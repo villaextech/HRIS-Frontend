@@ -11,6 +11,7 @@ const Employee = () => {
     dateOfBirth: "",
     gender: "",
     email: "",
+    password: "",
     contactPhoneNumber: "",
     homeAddress: "",
     designation: "",
@@ -135,6 +136,7 @@ const Employee = () => {
       dateOfBirth: "",
       gender: "",
       email: "",
+      password: "",
       contactPhoneNumber: "",
       homeAddress: "",
       designation: "",
@@ -249,6 +251,7 @@ const Employee = () => {
       dateOfBirth: "",
       gender: "",
       email: "",
+      password: "",
       contactPhoneNumber: "",
       homeAddress: "",
       designation: "",
@@ -475,11 +478,11 @@ const Employee = () => {
                     </div>
                     <div className="col-md-6">
                       <input
-                        type="text"
-                        id="contactPhoneNumber"
-                        name="contactPhoneNumber"
-                        placeholder="Contact Phone Number"
-                        value={formData.contactPhoneNumber}
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
                         onChange={handleChange}
                         required
                         className="form-control"
@@ -489,12 +492,12 @@ const Employee = () => {
 
                   <div className="row mb-3">
                     <div className="col-md-6">
-                      <input
+                    <input
                         type="text"
-                        id="homeAddress"
-                        name="homeAddress"
-                        placeholder="Home Address"
-                        value={formData.homeAddress}
+                        id="contactPhoneNumber"
+                        name="contactPhoneNumber"
+                        placeholder="Contact Phone Number"
+                        value={formData.contactPhoneNumber}
                         onChange={handleChange}
                         required
                         className="form-control"
@@ -919,7 +922,21 @@ const Employee = () => {
                       />
                     </div>
                     <div className="col-md-6">
-                      <textarea
+                    <input
+                        type="text"
+                        id="homeAddress"
+                        name="homeAddress"
+                        placeholder="Home Address"
+                        value={formData.homeAddress}
+                        onChange={handleChange}
+                        required
+                        className="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div className="row mb-3">
+                    <div className="col-md-6">
+                    <textarea
                         id="notes"
                         name="notes"
                         placeholder="Notes"
@@ -928,7 +945,7 @@ const Employee = () => {
                         className="form-control"
                       />
                     </div>
-                  </div>
+                    </div>
                   <div className="text-end">
                     <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#3B8682', borderColor: '#3B8682', marginRight: '70px' }}>
                       {editIndex !== null ? "Update" : "Submit"}
