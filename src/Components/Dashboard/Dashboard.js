@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { Card, CardBody, CardSubtitle, CardTitle } from "reactstrap";
+import Chart from "react-apexcharts";
 import "./Dashboard.css"; // Import the CSS file
 
 // Reusable CheckboxDropdown Component
@@ -18,7 +20,6 @@ const CheckboxDropdown = ({ label, options, selectedOptions, onChange }) => {
     onChange(newSelectedOptions);
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -58,32 +59,22 @@ const CheckboxDropdown = ({ label, options, selectedOptions, onChange }) => {
 const Dashboard = () => {
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showAttendance, setShowAttendance] = useState(false);
-
-  // States for Filters
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState([]);
   const [selectedBiometricIds, setSelectedBiometricIds] = useState([]);
   const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([]);
   const [selectedStatuses, setSelectedStatuses] = useState([]);
-
-  // Date Range State
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
-
-  // UseRef for Debounce Timeout
   const debounceTimeoutRef = useRef(null);
 
-  // Fetch Employees Function
   const fetchEmployees = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const params = {};
-
       if (startDate) params.start_date = startDate.toISOString().split('T')[0];
       if (endDate) params.end_date = endDate.toISOString().split('T')[0];
       if (selectedStatuses.length > 0) params.status = selectedStatuses;
@@ -109,7 +100,6 @@ const Dashboard = () => {
     }
   }, [selectedEmployeeNames, selectedBiometricIds, selectedEmployeeIds, startDate, endDate, selectedStatuses]);
 
-  // Debounce Fetch Employees
   useEffect(() => {
     if (showAttendance) {
       if (debounceTimeoutRef.current) {
@@ -122,7 +112,6 @@ const Dashboard = () => {
     }
   }, [fetchEmployees, showAttendance, selectedEmployeeNames, selectedBiometricIds, selectedEmployeeIds, selectedStatuses, startDate, endDate]);
 
-  // Handle Reset Filters
   const handleResetFilters = () => {
     setSelectedEmployeeNames([]);
     setSelectedBiometricIds([]);
@@ -130,85 +119,113 @@ const Dashboard = () => {
     setSelectedStatuses([]);
     setDateRange([null, null]);
     setSearchTerm("");
-    setCurrentPage(1);
     if (showAttendance) {
       fetchEmployees();
     }
   };
 
-  // Handle Search
   const handleSearch = (e) => {
     setSearchTerm(e.target.value || "");
-    setCurrentPage(1); // Reset to first page on search
   };
 
-  // Pagination Handlers
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  // Prepare data for the chart based on the filtered employees
+  const prepareChartData = () => {
+    const checkInData = {};
+    const checkOutData = {};
+    const absentDays = new Set(); // Track absent days
+
+    employees.forEach(employee => {
+      const date = new Date(employee.date);
+      const day = date.getDate();
+      const checkInTime = employee.check_in_time ? new Date(`${employee.date}T${employee.check_in_time}`) : null;
+      const checkOutTime = employee.check_out_time ? new Date(`${employee.date}T${employee.check_out_time}`) : null;
+
+      // Check if the date is within the selected date range
+      if (startDate && endDate && (date < startDate || date > endDate)) {
+        return;
+      }
+
+      // Record check-in times
+      if (checkInTime) {
+        if (!checkInData[day]) {
+          checkInData[day] = [];
+        }
+        checkInData[day].push(checkInTime);
+      }
+
+      // Record check-out times
+      if (checkOutTime) {
+        if (!checkOutData[day]) {
+          checkOutData[day] = [];
+        }
+        checkOutData[day].push(checkOutTime);
+      }
+
+      // If no check-in or check-out, mark as absent
+      if (!checkInTime && !checkOutTime) {
+        absentDays.add(day);
+      }
+    });
+
+    const categories = Array.from({ length: 31 }, (_, i) => i + 1);
+    const checkInSeriesData = categories.map(day => {
+      const times = checkInData[day] || [];
+      const totalMinutes = times.reduce((sum, time) => sum + time.getHours() * 60 + time.getMinutes(), 0);
+      return totalMinutes / (times.length || 1) || null; // Average in minutes
+    });
+
+    const checkOutSeriesData = categories.map(day => {
+      const times = checkOutData[day] || [];
+      const totalMinutes = times.reduce((sum, time) => sum + time.getHours() * 60 + time.getMinutes(), 0);
+      return totalMinutes / (times.length || 1) || null; // Average in minutes
+    });
+
+    const absentSeriesData = categories.map(day => (absentDays.has(day) ? 1 : null)); // Mark absent days
+
+    return {
+      categories,
+      checkInSeriesData,
+      checkOutSeriesData,
+      absentSeriesData,
+    };
   };
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
+  const { categories, checkInSeriesData, checkOutSeriesData, absentSeriesData } = prepareChartData();
+
+  const chartOptions = {
+    chart: {
+      toolbar: { show: false },
+      type: 'bar',
+      stacked: false,
+    },
+    dataLabels: { enabled: false },
+    legend: {
+      show: true,
+    },
+    colors: ["#0d6efd", "#28a745", "#dc3545"], // Colors for Check-In, Check-Out, and Absent
+    xaxis: {
+      categories,
+    },
+    yaxis: {
+      title: {
+        text: 'Time',
+      },
+      labels: {
+        formatter: (value) => {
+          const totalMinutes = Math.round(value);
+          const hours = Math.floor(totalMinutes / 60) % 12 || 12;
+          const minutes = totalMinutes % 60;
+          const ampm = totalMinutes >= 720 ? 'PM' : 'AM';
+          return `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+        },
+      },
+    },
+    series: [
+      { name: "Check-In", data: checkInSeriesData },
+      { name: "Check-Out", data: checkOutSeriesData },
+      { name: "Absent", data: absentSeriesData },
+    ],
   };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
-
-  // Paginate Function
-  const paginate = (items, currentPage, itemsPerPage) => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return items.slice(startIndex, startIndex + itemsPerPage);
-  };
-
-  // Filter employees based on searchTerm and date range
-  const filteredEmployees = employees.filter((employee) => {
-    const biometricIdStr = employee.biometric_id ? employee.biometric_id.toString().toLowerCase() : '';
-    const fullName = employee.employee.full_name.toLowerCase();
-    const search = searchTerm.toLowerCase();
-
-    // Date filtering logic
-    const employeeDate = new Date(employee.date);
-    let isWithinDateRange = false;
-
-    if (startDate && endDate) {
-      // Both start and end dates are selected
-      isWithinDateRange = employeeDate >= startDate && employeeDate <= endDate;
-    } else if (startDate) {
-      // Only start date is selected
-      isWithinDateRange = employeeDate.toDateString() === startDate.toDateString();
-    } else if (endDate) {
-      // Only end date is selected
-      isWithinDateRange = employeeDate.toDateString() === endDate.toDateString();
-    } else {
-      // No date selected
-      isWithinDateRange = true;
-    }
-
-    return (biometricIdStr.includes(search) || fullName.includes(search)) && isWithinDateRange;
-  });
-
-  const paginatedEmployees = paginate(filteredEmployees, currentPage, itemsPerPage);
-  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
-
-  // Format Time Function
-  const formatTime = (dateStr, timeStr) => {
-    if (!dateStr || !timeStr) return '';
-    const fullDateStr = `${dateStr}T${timeStr}`; // Combine date and time
-    const date = new Date(fullDateStr);
-    if (isNaN(date)) return 'Invalid Date';
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-  };
-
-  // Extract Unique Options for Dropdowns
-  const employeeNamesOptions = Array.from(new Set(employees.map(emp => emp.employee.full_name)));
-  const employeeIdsOptions = Array.from(new Set(employees.map(emp => emp.employee.employee_id)));
-  const biometricIdsOptions = Array.from(new Set(employees.map(emp => emp.biometric_id)));
-  const statusOptions = ["present", "absent", "on_leave"]; // Assuming these are the possible statuses
 
   return (
     <div className="main">
@@ -223,7 +240,7 @@ const Dashboard = () => {
               value={searchTerm}
               onChange={handleSearch}
               className="form-control search-input me-2"
-              disabled={!showAttendance} // Disable search when attendance is hidden
+              disabled={!showAttendance}
             />
             <button
               className="btn add1"
@@ -238,161 +255,83 @@ const Dashboard = () => {
         {showAttendance && (
           <div className="filters mb-4">
             <div className="row g-2 align-items-center">
-              {/* Employee Name Filter */}
               <div className="col-md-3">
                 <CheckboxDropdown
                   label="Employee Name"
-                  options={employeeNamesOptions}
+                  options={Array.from(new Set(employees.map(emp => emp.employee.full_name)))}
                   selectedOptions={selectedEmployeeNames}
                   onChange={setSelectedEmployeeNames}
                 />
               </div>
-
-              {/* Employee ID Filter */}
               <div className="col-md-3">
                 <CheckboxDropdown
                   label="Employee ID"
-                  options={employeeIdsOptions}
+                  options={Array.from(new Set(employees.map(emp => emp.employee.employee_id)))}
                   selectedOptions={selectedEmployeeIds}
                   onChange={setSelectedEmployeeIds}
                 />
               </div>
-
-              {/* Biometric ID Filter */}
               <div className="col-md-3">
                 <CheckboxDropdown
                   label="Biometric ID"
-                  options={biometricIdsOptions}
+                  options={Array.from(new Set(employees.map(emp => emp.biometric_id)))}
                   selectedOptions={selectedBiometricIds}
                   onChange={setSelectedBiometricIds}
                 />
               </div>
-
-              {/* Status Filter */}
               <div className="col-md-3">
                 <CheckboxDropdown
                   label="Status"
-                  options={statusOptions}
+                  options={["Present", "Absent", "Leave", "Half Day"]}
                   selectedOptions={selectedStatuses}
                   onChange={setSelectedStatuses}
                 />
               </div>
-
-              {/* Date Range Picker */}
-              <div className="col-md-3">
+              <div className="col-md-4">
                 <DatePicker
+                  selected={startDate}
+                  onChange={(dates) => setDateRange(dates)}
                   selectsRange
                   startDate={startDate}
                   endDate={endDate}
-                  onChange={(update) => setDateRange(update)}
-                  isClearable={true}
-                  placeholderText="Select Date Range"
                   className="form-control"
+                  placeholderText="Select Date Range"
                 />
               </div>
-
-              {/* Reset Filters Button */}
               <div className="col-md-2">
-                <button className="btn btn-secondary w-100" onClick={handleResetFilters}>
-                  Reset
+                <button className="btn reset-btn" onClick={handleResetFilters}>
+                  Reset Filters
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Loading Indicator */}
-        {loading && showAttendance && (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
+        {/* Chart Section */}
+        {showAttendance && !loading && employees.length > 0 && (
+          <Card>
+            <CardBody>
+              <CardTitle tag="h5">Attendance Chart</CardTitle>
+              <CardSubtitle tag="h6" className="mb-2 text-muted">
+                Check-in and Check-out Times with Absences
+              </CardSubtitle>
+              <Chart
+                options={chartOptions}
+                series={[
+                  { name: "Check-In", data: checkInSeriesData },
+                  { name: "Check-Out", data: checkOutSeriesData },
+                  { name: "Absent", data: absentSeriesData },
+                ]}
+                type="bar"
+                height={350}
+              />
+            </CardBody>
+          </Card>
         )}
 
-        {/* Error Message */}
-        {error && showAttendance && (
-          <div className="alert alert-danger" role="alert">
-            {error}
-          </div>
-        )}
-
-        {/* Attendance Table */}
-        {showAttendance && !loading && !error && (
-          <>
-            {filteredEmployees.length > 0 ? (
-              <div className="table-responsive">
-                <table className="table table-striped">
-                  <thead className="align-middle">
-                    <tr>
-                      <th>No</th>
-                      <th>Employee ID</th>
-                      <th>Full Name</th>
-                      <th>Date</th>
-                      <th>Check-In Time</th>
-                      <th>Check-Out Time</th>
-                      <th>Status</th>
-                      <th>Working Hours</th>
-                      <th>Late</th>
-                      <th>Remarks</th>
-                      <th>Biometric ID</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paginatedEmployees.map((employee, index) => (
-                      <tr key={employee.id}>
-                        <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                        <td>{employee.employee.employee_id}</td>
-                        <td>{employee.employee.full_name}</td>
-                        <td>{employee.date}</td>
-                        <td>{formatTime(employee.date, employee.check_in_time)}</td>
-                        <td>{formatTime(employee.date, employee.check_out_time)}</td>
-                        <td>{employee.status}</td>
-                        <td>{employee.working_hours}</td>
-                        <td>{employee.is_late ? 'Yes' : 'No'}</td>
-                        <td>{employee.remarks}</td>
-                        <td>{employee.biometric_id}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="alert alert-info" role="alert">
-                No attendance records found.
-              </div>
-            )}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="pagination-container d-flex justify-content-center mt-3">
-                <button
-                  className="pagination-button btn btn-outline-primary me-2"
-                  onClick={handlePreviousPage}
-                  disabled={currentPage === 1}
-                >
-                  {'<'}
-                </button>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i + 1}
-                    className={`pagination-button btn ${currentPage === i + 1 ? 'btn-primary' : 'btn-outline-primary'} me-2`}
-                    onClick={() => handlePageChange(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-                <button
-                  className="pagination-button btn btn-outline-primary"
-                  onClick={handleNextPage}
-                  disabled={currentPage === totalPages}
-                >
-                  {'>'}
-                </button>
-              </div>
-            )}
-          </>
-        )}
+        {/* Loading and Error Handling */}
+        {loading && <div>Loading...</div>}
+        {error && <div>{error}</div>}
       </div>
     </div>
   );

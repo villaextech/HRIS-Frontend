@@ -10,7 +10,9 @@ import Employee from './Components/Employee/Employee';
 import Attendance from './Components/Attendance/Attendance';
 import Biometric from './Components/Biometric/Biometric';
 import Dashboard from './Components/Dashboard/Dashboard';
+import Aleave from './Components/Apply leave/Aleave';
 import Role from './Components/Role/Role';
+import Workhome from './Components/Workhome/Workhome';
 import Shift from './Components/Shift/Shift';
 import Login from './Components/Login/Login';
 
@@ -42,6 +44,8 @@ const App = () => {
             <Route path="/biometric" element={isAuthenticated && isAuthorized('/biometric') ? <Biometric /> : <Navigate to="/login" />} />
             <Route path="/dashboard" element={isAuthenticated && isAuthorized('/dashboard') ? <Dashboard /> : <Navigate to="/login" />} />
             <Route path="/shift" element={isAuthenticated && isAuthorized('/shift') ? <Shift /> : <Navigate to="/login" />} />
+            <Route path="/wfh" element={isAuthenticated && isAuthorized('/wfh') ? <Workhome /> : <Navigate to="/login" />} />
+            <Route path="/leave" element={isAuthenticated && isAuthorized('/leave') ? <Aleave /> : <Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </div>

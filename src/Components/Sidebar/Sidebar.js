@@ -77,12 +77,34 @@ const Sidebar = ({ setIsAuthenticated, allowedUrls }) => {
                       className={!isAllowed('/shift') ? 'disabled' : ''}
                       onClick={!isAllowed('/shift') ? handleDisabledClick : undefined}
                     >
-                      <i className='bx bx-time-five icon'></i> 
-                      <span className="text nav-text">Shift</span> 
+                      <i className='bx bx-time-five icon'></i>
+                      <span className="text nav-text">Shift</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/leave"
+                      className={!isAllowed('/leave') ? 'disabled' : ''}
+                      onClick={!isAllowed('/leave') ? handleDisabledClick : undefined}
+                    >
+                      <i className='bx bx-calendar icon'></i>
+                      <span className="text nav-text">Leave</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/wfh"
+                      className={!isAllowed('/wfh') ? 'disabled' : ''}
+                      onClick={!isAllowed('/wfh') ? handleDisabledClick : undefined}
+                    >
+                      <i className='bx bx-home icon'></i> 
+                      <span className="text nav-text">WFH</span>
                     </Link>
                   </li>
                 </ul>
               </li>
+
+
               <li className="nav-link has-dropdown">
                 <Link
                   to="/company"

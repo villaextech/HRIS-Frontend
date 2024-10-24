@@ -1,0 +1,19 @@
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around; /* Align items in a row with space */
+  }
+  
+  .radio-item {
+    margin-bottom: 1rem; /* Space between each radio item */
+  }
+  
+  .radio-item input {
+    margin-right: 0.5rem; /* Space between the radio button and label */
+  }
+  
+  .radio-item label {
+    display: flex; /* Align the input and text */
+    align-items: center; /* Center align items */
+  }
+  
